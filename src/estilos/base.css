@@ -1,0 +1,25 @@
+/* Base mobile-first. Identidade visual definitiva entra depois dos wireframes. */
+:root {
+  --cor-fundo: #fffaf2;
+  --cor-texto: #2b1d12;
+  --cor-destaque: #c2410c;
+  --espaco: 1rem;
+  font-family: system-ui, sans-serif;
+  color: var(--cor-texto);
+  background: var(--cor-fundo);
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+
+.pagina {
+  padding: var(--espaco);
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+a { color: var(--cor-destaque); }
+
+@media (min-width: 48rem) {
+  .pagina { padding: calc(var(--espaco) * 2); }
+}
