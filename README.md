@@ -1,11 +1,12 @@
 # Raízes do Nordeste · Front-end multicanal
 
 Projeto Multidisciplinar UNINTER 2026 · Trilha Front-end · Opção B (codificação)
-Lucas Lopes Nepmusceno · RU 4589258
+Lucas Lopes Nepomusceno · RU 4589258
 
 Protótipo funcional da interface da rede de lanchonetes Raízes do Nordeste em três canais (App/Web, Totem e operação da loja), com cardápio dinâmico por unidade, fidelidade, campanhas, pagamento por serviço externo simulado e LGPD aplicada na interface.
 
-**Deploy:** _(link da Vercel)_
+**Deploy:** https://raizes-do-nordeste-red.vercel.app  
+**Repositório:** https://github.com/luccaslopesn/raizes-do-nordeste
 **Nenhum pagamento real é feito.** Todos os dados são simulados.
 
 ## Acesso rápido para avaliação

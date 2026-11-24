@@ -57,7 +57,7 @@ export function Inicio() {
       </main>
 
       <footer className="rodape">
-        <div className="container texto-pequeno">Projeto Multidisciplinar · Trilha Front-end · Lucas Lopes Nepmusceno · RU 4589258</div>
+        <div className="container texto-pequeno">Projeto Multidisciplinar · Trilha Front-end · Lucas Lopes Nepomusceno · RU 4589258</div>
       </footer>
     </div>
   );
