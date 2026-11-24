@@ -25,3 +25,6 @@ dist-ssr
 
 # Resultado bruto da execução E2E (as capturas ficam versionadas)
 evidencias/resultado.json
+
+# Arquivos temporários do gerador do documento
+docs/documento/_*

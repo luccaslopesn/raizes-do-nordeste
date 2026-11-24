@@ -1,0 +1,126 @@
+<h1>Análise e requisitos</h1>
+
+<h2>Análise do problema</h2>
+<p>Antes de listar requisitos, cada desafio do estudo de caso foi traduzido em uma consequência para a interface. O [[q-desafios]] registra essa leitura e serve de justificativa para as decisões tomadas nas seções seguintes.</p>
+
+<figure data-tipo="Quadro" id="q-desafios">
+  <figcaption>Desafios do estudo de caso e resposta da interface</figcaption>
+  <table>
+    <thead><tr><th style="width:24%">Desafio do caso</th><th style="width:38%">Risco para a experiência</th><th>Decisão de interface</th></tr></thead>
+    <tbody>
+      <tr><td>Vários canais, uma única jornada</td><td>Regras diferentes de preço ou de status em cada canal geram reclamação e perda de confiança</td><td>Uma única regra de preço e um único ciclo de status compartilhados por App, Web, Totem e Balcão; cada canal muda só a apresentação</td></tr>
+      <tr><td>Unidades diferentes (formato, estoque, sazonalidade, região)</td><td>Cliente escolhe um item que a unidade não serve ou que acabou</td><td>Unidade escolhida antes do cardápio; itens fora do formato não aparecem; esgotados aparecem desabilitados com o motivo; estoque revalidado ao pagar</td></tr>
+      <tr><td>Fidelização com LGPD</td><td>Coleta excessiva de dados ou consentimento forçado</td><td>Consentimentos separados e desmarcados; dado pedido só quando necessário, com a finalidade ao lado; Central de Privacidade</td></tr>
+      <tr><td>Pagamento por serviço externo</td><td>Tela travada, cobrança dupla, cliente sem saber se pagou</td><td>Estado "aguardando serviço externo" explícito; botão bloqueado durante o envio; chave de idempotência; tempo limite com a mensagem "nenhum valor foi cobrado"</td></tr>
+      <tr><td>Horários de pico e alta disponibilidade</td><td>Interface lenta ou que quebra com rede instável</td><td>Carregamento leve dividido por canal; esqueletos de carregamento; erros recuperáveis com "tentar de novo"</td></tr>
+      <tr><td>Matriz precisa de indicadores e auditoria</td><td>Cancelamentos e descontos sem rastreabilidade</td><td>Cancelamento exige motivo; toda alteração sensível gera registro com perfil, data e pedido; painel do gerente</td></tr>
+      <tr><td>Totem compartilhado em local público</td><td>Exposição de dados do cliente anterior ou de quem está atrás na fila</td><td>Nada persistido no aparelho; CPF oculto na digitação; sessão apagada por inatividade</td></tr>
+    </tbody>
+  </table>
+</figure>
+
+<h2>Requisitos funcionais</h2>
+<p>Adota-se a distinção usual entre requisitos funcionais, que descrevem o que o sistema deve fazer, e não funcionais, que restringem como ele deve fazê-lo (SOMMERVILLE, 2018; PRESSMAN; MAXIM, 2016). Os requisitos funcionais estão no [[q-rf]]. A prioridade segue o método MoSCoW: <em>M</em> (deve ter: sem ele o sistema não atende ao negócio), <em>S</em> (deveria ter: importante, mas com alternativa manual), <em>C</em> (poderia ter: melhora a experiência). Todos os requisitos obrigatórios do roteiro foram classificados como <em>M</em> e estão implementados.</p>
+
+<figure data-tipo="Quadro" id="q-rf" class="quadro-longo">
+  <figcaption>Requisitos funcionais</figcaption>
+  <table>
+    <thead><tr><th style="width:7%">ID</th><th style="width:33%">Requisito</th><th style="width:15%">Canais</th><th style="width:5%">Prio.</th><th>Justificativa</th></tr></thead>
+    <tbody>
+      <tr><td>RF01</td><td>Cadastrar cliente com consentimentos granulares (termos obrigatório; fidelidade e ofertas opcionais)</td><td>App, Web</td><td>M</td><td>Base para pedido vinculado à conta e para o uso lícito de dados (LGPD)</td></tr>
+      <tr><td>RF02</td><td>Autenticar e encerrar sessão</td><td>App, Web</td><td>M</td><td>Pedido e pontos pertencem a uma pessoa identificada</td></tr>
+      <tr><td>RF03</td><td>Escolher a unidade de retirada, com busca, formato e horário</td><td>App, Web, Totem</td><td>M</td><td>Cardápio, preço e campanhas dependem da unidade</td></tr>
+      <tr><td>RF04</td><td>Exibir cardápio dinâmico por unidade: formato, estoque local, sazonalidade e preço regional</td><td>Todos</td><td>M</td><td>Requisito central do caso; evita vender o que a loja não tem</td></tr>
+      <tr><td>RF05</td><td>Montar e revisar carrinho (adicionar, alterar quantidade, remover)</td><td>App, Web, Totem, Balcão</td><td>M</td><td>Etapa obrigatória do fluxo de pedido</td></tr>
+      <tr><td>RF06</td><td>Realizar pedido com revalidação de disponibilidade antes do pagamento</td><td>Todos</td><td>M</td><td>Estoque pode mudar enquanto o cliente escolhe</td></tr>
+      <tr><td>RF07</td><td>Solicitar pagamento ao serviço externo (Pix, crédito, débito) e exibir o retorno: aprovado, recusado, expirado ou falha de comunicação</td><td>App, Web, Totem, Balcão</td><td>M</td><td>Pagamento desacoplado exigido pelo caso; o cliente precisa saber se pagou</td></tr>
+      <tr><td>RF08</td><td>Acompanhar o status do pedido com código de retirada, atualizado sem recarregar a página</td><td>App, Web, Totem, Painel</td><td>M</td><td>Reduz fila e dúvidas no balcão</td></tr>
+      <tr><td>RF09</td><td>Acumular pontos de fidelidade a cada pedido pago</td><td>App, Web, Totem</td><td>M</td><td>Objetivo do programa de fidelização</td></tr>
+      <tr><td>RF10</td><td>Resgatar recompensas usando pontos no carrinho</td><td>App, Web</td><td>M</td><td>Sistema de recompensas obrigatório no roteiro</td></tr>
+      <tr><td>RF11</td><td>Exibir e aplicar promoções e campanhas (da rede, da unidade e segmentadas)</td><td>Todos</td><td>M</td><td>Campanhas segmentadas são citadas no caso</td></tr>
+      <tr><td>RF12</td><td>Central de Privacidade: ver dados e finalidade, revogar consentimentos, baixar dados e excluir conta</td><td>App, Web</td><td>M</td><td>Direitos do titular (LGPD, art. 18)</td></tr>
+      <tr><td>RF13</td><td>Aviso de cookies com opção de recusar os não essenciais</td><td>App, Web</td><td>M</td><td>Consentimento antes de coleta não essencial</td></tr>
+      <tr><td>RF14</td><td>Identificação opcional por CPF no totem para creditar pontos</td><td>Totem</td><td>S</td><td>Leva a fidelidade ao totem sem exigir cadastro</td></tr>
+      <tr><td>RF15</td><td>Registrar pedido no balcão com cobrança pelo mesmo serviço de pagamento</td><td>Balcão</td><td>S</td><td>Atendimento humano continua existindo</td></tr>
+      <tr><td>RF16</td><td>Fila de preparo por status para a cozinha</td><td>Cozinha</td><td>M</td><td>Sem ela o pedido não chega à produção</td></tr>
+      <tr><td>RF17</td><td>Entregar e cancelar pedido, com motivo obrigatório no cancelamento</td><td>Balcão</td><td>M</td><td>Fecha o ciclo do pedido; operação sensível auditada</td></tr>
+      <tr><td>RF18</td><td>Indicadores da unidade e trilha de auditoria</td><td>Gestão</td><td>S</td><td>A matriz acompanha vendas, produtos e operações sensíveis</td></tr>
+      <tr><td>RF19</td><td>Controle de acesso por perfil (atendente, cozinha, gerente)</td><td>Operação</td><td>M</td><td>Cada perfil acessa só o necessário</td></tr>
+      <tr><td>RF20</td><td>Painel de chamada com os códigos prontos</td><td>Loja</td><td>C</td><td>Agiliza a retirada sem expor nomes</td></tr>
+      <tr><td>RF21</td><td>Histórico de pedidos do cliente</td><td>App, Web</td><td>C</td><td>Facilita repetir pedidos e consultar comprovantes</td></tr>
+    </tbody>
+  </table>
+</figure>
+
+<h2>Requisitos não funcionais</h2>
+<p>Cada requisito não funcional do [[q-rnf]] tem um critério verificável. A abordagem mobile-first (WROBLEWSKI, 2011) e o layout fluido com media queries (MARCOTTE, 2011) orientam RNF01 e RNF02; a acessibilidade segue a WCAG 2.1 (W3C, 2018); e a performance é medida pelas métricas Core Web Vitals (GOOGLE, [2024]). Os resultados medidos estão na [[s-testes]].</p>
+
+<figure data-tipo="Quadro" id="q-rnf" class="quadro-longo">
+  <figcaption>Requisitos não funcionais</figcaption>
+  <table>
+    <thead><tr><th style="width:8%">ID</th><th style="width:20%">Requisito</th><th style="width:44%">Critério de aceitação</th><th>Justificativa</th></tr></thead>
+    <tbody>
+      <tr><td>RNF01</td><td>Mobile-first</td><td>Estilos base escritos para 360 px; media queries apenas ampliam o layout</td><td>Maior parte dos pedidos antecipados vem do celular</td></tr>
+      <tr><td>RNF02</td><td>Responsividade</td><td>Sem rolagem horizontal em 360, 768 e 1280 px; pontos de quebra em 640, 768, 896 e 1024 px</td><td>Mesma aplicação serve App e Web</td></tr>
+      <tr><td>RNF03</td><td>Performance</td><td>Lighthouse (celular) com nota de performance ≥ 90; maior elemento visível (LCP) ≤ 2,5 s; deslocamento de layout (CLS) ≤ 0,1; JavaScript inicial ≤ 130 kB comprimido</td><td>Picos de acesso em horário de café da manhã e almoço</td></tr>
+      <tr><td>RNF04</td><td>Escalabilidade da interface</td><td>Nova unidade, produto ou campanha entra por dados, sem alterar telas; código do totem e da operação carregado só nesses canais</td><td>Rede em expansão contínua</td></tr>
+      <tr><td>RNF05</td><td>Tolerância a falhas</td><td>Todo carregamento tem estado de espera e de erro com "tentar de novo"; pagamento com tempo limite de 8 s e sem cobrança duplicada</td><td>Indisponibilidade afeta faturamento e imagem</td></tr>
+      <tr><td>RNF06</td><td>Acessibilidade</td><td>WCAG 2.1 nível AA: contraste ≥ 4,5:1, rótulos em todos os campos, foco visível, navegação por teclado, respeito a "reduzir movimento"; Lighthouse acessibilidade ≥ 95</td><td>Público amplo, inclusive no totem</td></tr>
+      <tr><td>RNF07</td><td>Usabilidade</td><td>Alvos de toque ≥ 44 px (App) e ≥ 72 px (Totem); retorno visual imediato a cada ação; mensagens de erro que dizem como corrigir</td><td>Uso rápido, muitas vezes em pé ou com pressa</td></tr>
+      <tr><td>RNF08</td><td>Privacidade desde a concepção</td><td>Consentimentos opcionais desmarcados; coleta mínima; CPF do totem não armazenado; equipe vê só primeiro nome e código</td><td>Exigência da diretoria e da LGPD</td></tr>
+      <tr><td>RNF09</td><td>Segurança na interface</td><td>Senha com no mínimo 8 caracteres, letras e números; mensagem de login que não revela se o e-mail existe; redirecionamento pós-login só para rotas internas; dados de cartão nunca digitados na interface da rede</td><td>Reduz riscos de vazamento e de fraude</td></tr>
+      <tr><td>RNF10</td><td>Consistência multicanal</td><td>Preço, desconto e pontos calculados por uma única função para todos os canais, coberta por testes</td><td>Evita divergência entre App, Totem e Balcão</td></tr>
+      <tr><td>RNF11</td><td>Manutenibilidade</td><td>Código tipado (TypeScript), telas separadas da camada de serviços, testes automatizados executáveis por comando</td><td>Troca da simulação pela API real sem reescrever telas</td></tr>
+    </tbody>
+  </table>
+</figure>
+
+<h2>Regras de negócio</h2>
+<p>As regras do [[q-rn]] são referenciadas pelos casos de uso e pelos testes. Elas estão concentradas na camada de serviços da aplicação, e não espalhadas pelas telas.</p>
+
+<figure data-tipo="Quadro" id="q-rn" class="quadro-longo">
+  <figcaption>Regras de negócio</figcaption>
+  <table>
+    <thead><tr><th style="width:8%">ID</th><th>Regra</th></tr></thead>
+    <tbody>
+      <tr><td>RN01</td><td>Unidade de formato reduzido não exibe produtos que exigem cozinha completa.</td></tr>
+      <tr><td>RN02</td><td>Produto com estoque local zerado aparece como "Esgotado nesta unidade" e não pode ser adicionado.</td></tr>
+      <tr><td>RN03</td><td>Produto sazonal só aparece dentro da sua janela de datas (ex.: pamonha e canjica de 1º de junho a 31 de julho).</td></tr>
+      <tr><td>RN04</td><td>O preço pode variar por região. O carrinho guarda o preço da unidade escolhida; trocar de unidade esvazia o carrinho.</td></tr>
+      <tr><td>RN05</td><td>Campanhas de desconto não se acumulam: aplica-se a de maior valor entre as elegíveis. A recompensa de fidelidade é aplicada depois, e o total nunca fica negativo.</td></tr>
+      <tr><td>RN06</td><td>Campanhas segmentadas só são exibidas e aplicadas para quem consentiu com ofertas personalizadas.</td></tr>
+      <tr><td>RN07</td><td>Cada R$ 1,00 pago gera 1 ponto; pedidos até 9h geram pontos em dobro. Só acumula quem aderiu ao programa.</td></tr>
+      <tr><td>RN08</td><td>Pontos são creditados apenas com pagamento aprovado e estornados se um pedido pago for cancelado.</td></tr>
+      <tr><td>RN09</td><td>Cada tentativa de pagamento tem uma chave de idempotência. Falha de comunicação reenvia a mesma chave; recusa ou expiração gera nova chave.</td></tr>
+      <tr><td>RN10</td><td>O serviço de pagamento tem 8 segundos para responder. Sem resposta, a tentativa é marcada como expirada e nenhum valor é cobrado.</td></tr>
+      <tr><td>RN11</td><td>O pedido segue a ordem Aguardando pagamento → Recebido → Em preparo → Pronto → Retirado. Cancelamento é permitido até Pronto, com motivo, e gera registro de auditoria.</td></tr>
+      <tr><td>RN12</td><td>O cliente só vê os próprios pedidos. A equipe da loja vê o código de retirada e, no máximo, o primeiro nome.</td></tr>
+      <tr><td>RN13</td><td>A disponibilidade dos itens é verificada de novo no momento do pagamento.</td></tr>
+    </tbody>
+  </table>
+</figure>
+
+<h2>Rastreabilidade</h2>
+<p>Para garantir coerência entre requisitos, modelagem, telas e testes, o [[q-rastreabilidade]] liga cada requisito funcional ao caso de uso, à rota da aplicação publicada e ao cenário de teste que o verifica.</p>
+
+<figure data-tipo="Quadro" id="q-rastreabilidade" class="quadro-longo">
+  <figcaption>Matriz de rastreabilidade: requisito, caso de uso, tela e teste</figcaption>
+  <table>
+    <thead><tr><th>Requisito</th><th>Caso de uso</th><th>Tela (rota)</th><th>Teste</th></tr></thead>
+    <tbody>
+      <tr><td>RF01, RF02</td><td>UC01</td><td>/app/cadastro, /app/entrar</td><td>CT09, CT10, CT16</td></tr>
+      <tr><td>RF03, RF04</td><td>UC03</td><td>/app, /app/unidade/:id, /totem/cardapio</td><td>CT02, CT03, CT14</td></tr>
+      <tr><td>RF05, RF06</td><td>UC05, UC06</td><td>/app/carrinho, /totem/carrinho</td><td>CT04, CT12</td></tr>
+      <tr><td>RF07</td><td>UC07</td><td>/app/pagamento, /totem/pagamento</td><td>CT04, CT06, CT07, CT08, CT21</td></tr>
+      <tr><td>RF08</td><td>UC10</td><td>/app/pedido/:id, /painel</td><td>CT05</td></tr>
+      <tr><td>RF09, RF10</td><td>UC08</td><td>/app/fidelidade, /app/carrinho</td><td>CT04, CT12</td></tr>
+      <tr><td>RF11</td><td>UC04</td><td>/app/promocoes</td><td>testes de unidade da precificação</td></tr>
+      <tr><td>RF12, RF13</td><td>UC02</td><td>/app/privacidade, banner</td><td>CT01, CT11</td></tr>
+      <tr><td>RF14</td><td>UC09</td><td>/totem/identificacao</td><td>CT12, CT18</td></tr>
+      <tr><td>RF15, RF17</td><td>UC14, UC15, UC16</td><td>/balcao</td><td>CT20</td></tr>
+      <tr><td>RF16</td><td>UC11</td><td>/cozinha</td><td>CT05</td></tr>
+      <tr><td>RF18, RF19</td><td>UC12, UC13</td><td>/operacao, /gestao</td><td>CT13, CT17, CT20</td></tr>
+      <tr><td>RF20, RF21</td><td>UC10</td><td>/painel, /app/pedidos</td><td>verificação visual</td></tr>
+    </tbody>
+  </table>
+</figure>

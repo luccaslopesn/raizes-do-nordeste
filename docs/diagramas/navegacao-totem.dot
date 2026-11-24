@@ -1,0 +1,13 @@
+digraph navegacao_totem {
+  graph [rankdir=LR, fontname="Arial", fontsize=13, nodesep=0.28, ranksep=0.42, pad=0.15, compound=true, newrank=true];
+  node  [shape=box, style="rounded,filled", fillcolor="#ffffff", color="#222222", penwidth=1.3, fontname="Arial", fontsize=11, margin="0.12,0.06", height=0.4];
+  edge  [color="#222222", penwidth=1.1, arrowsize=0.7, fontname="Arial", fontsize=9.5];
+
+  subgraph cluster_totem {
+    label=<<b>Totem de autoatendimento</b>>; style="rounded,filled"; fillcolor="#f4f4f4"; color="#222222";
+    T0 [label="Descanso"]; T1 [label="Cardápio\n(toque)"]; T2 [label="Revisar\npedido"]; T3 [label="CPF\nopcional"]; T4 [label="Pagamento"]; T5 [label="Senha de\nretirada"];
+    T0 -> T1 -> T2 -> T3 -> T4 -> T5;
+    T5 -> T0 [label="após 20 s", style=dashed, constraint=false];
+    T1 -> T0 [label="60 s sem toque", style=dotted, constraint=false];
+  }
+}

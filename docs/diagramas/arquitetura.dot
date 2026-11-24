@@ -1,0 +1,22 @@
+digraph arquitetura {
+  graph [rankdir=TB, fontname="Arial", nodesep=0.25, ranksep=0.32, pad=0.12, newrank=true];
+  node  [shape=box, style="rounded,filled", fillcolor="#ffffff", color="#222222", penwidth=1.2, fontname="Arial", fontsize=10.5, margin="0.10,0.05"];
+  edge  [color="#333333", penwidth=1.0, arrowsize=0.6, fontname="Arial", fontsize=9];
+
+  subgraph cluster_telas { label=<<b>Telas por canal</b><br/>(React Router, carregadas sob demanda)>; fontsize=11; style="rounded,filled"; fillcolor="#f3f3f3";
+    app [label="App / Web\n13 telas"]; totem [label="Totem\n6 telas"]; op [label="Operação\nbalcão · cozinha · gestão · painel"]; }
+  comp [label="Componentes reutilizáveis\nCampo · Diálogo · PainelPagamento · LinhaDoTempo · ResumoValores · BannerCookies", fillcolor="#f3f3f3"];
+  subgraph cluster_estado { label=<<b>Estado</b><br/>(Zustand)>; fontsize=11; style="rounded,filled"; fillcolor="#f3f3f3";
+    est1 [label="Carrinho\n(app: persistente; totem e balcão: memória)"]; est2 [label="Sessão e consentimentos"]; est3 [label="Pedidos + auditoria\n(sincronizados entre abas)"]; }
+  subgraph cluster_serv { label=<<b>Camada de serviços</b><br/>(contrato com o back-end)>; fontsize=11; style="rounded,filled"; fillcolor="#f3f3f3";
+    s1 [label="Cardápio por unidade\nRN01–RN04"]; s2 [label="Precificação única\nRN05–RN07"]; s3 [label="Pagamento\nidempotência · tempo limite\nRN09–RN10"]; }
+  mock [label="Dados simulados + latência\n(hoje)", style="rounded,dashed"];
+  api  [label="API da plataforma\n(evolução)", style="rounded,dashed"];
+  pag  [label="«sistema externo»\nServiço de Pagamento", shape=box, style="filled", fillcolor="#e6e6e6"];
+
+  app -> comp; totem -> comp; op -> comp;
+  comp -> est1; comp -> est2; comp -> est3;
+  est1 -> s2; est3 -> s3; est2 -> s2; comp -> s1;
+  s1 -> mock; s2 -> mock; s3 -> pag;
+  mock -> api [style=dashed, label=" substituível ", dir=none];
+}

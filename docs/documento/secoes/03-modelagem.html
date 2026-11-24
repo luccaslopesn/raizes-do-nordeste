@@ -1,0 +1,113 @@
+<h1>Modelagem e arquitetura da interface</h1>
+
+<h2>Diagrama de casos de uso</h2>
+<p>A [[f-casos-uso]] apresenta os dezesseis casos de uso da plataforma e os cinco atores exigidos. O cliente aparece como um único ator para os três canais, porque os objetivos dele são os mesmos no App, na Web e no Totem; o que muda entre canais é a interface, tratada na [[s-wireframes]]. O gerente é uma especialização do atendente e da cozinha (generalização), pois pode executar tudo o que esses perfis executam, além de consultar indicadores e auditoria.</p>
+<p>Duas relações merecem destaque. <em>Realizar pedido</em> (UC06) e <em>Registrar pedido no balcão</em> (UC16) incluem <em>Realizar pagamento</em> (UC07): não existe pedido confirmado sem passar pelo serviço externo, que é o único ator ligado a UC07. <em>Resgatar recompensa</em> (UC08) e <em>Identificar-se por CPF no totem</em> (UC09) estendem a realização do pedido, porque são comportamentos opcionais que só ocorrem sob condição (ter pontos suficientes; querer pontuar no totem).</p>
+
+<figure data-tipo="Figura" id="f-casos-uso" data-largura="90%">
+  <figcaption>Diagrama de casos de uso da plataforma Raízes do Nordeste</figcaption>
+  <img src="../diagramas/casos-de-uso.svg" alt="Diagrama de casos de uso com os atores Cliente, Cozinha, Gerente, Atendente e Serviço de Pagamento">
+</figure>
+
+<h2 id="s-feature">Descrição de feature: UC07 Realizar pagamento</h2>
+<p>A funcionalidade escolhida para detalhamento é o pagamento, por concentrar a integração externa e os principais riscos da operação. A descrição segue o modelo de caso de uso fornecido no roteiro ([[q-uc07]]) e é complementada pelo diagrama de sequência da [[f-sequencia]].</p>
+
+<figure data-tipo="Quadro" id="q-uc07" class="quadro-longo quadro-uc">
+  <figcaption>Descrição do caso de uso UC07 Realizar pagamento</figcaption>
+  <table>
+    <tbody>
+      <tr><th style="width:22%">Descrição</th><td>Solicita a cobrança de um pedido a um serviço externo de pagamento, aguarda a resposta, registra o resultado e atualiza o status do pedido e a interface. A plataforma não processa nem armazena dados de cartão.</td></tr>
+      <tr><th>Ator principal</th><td>Cliente (App, Web ou Totem). No balcão, o atendente executa o caso em nome do cliente (UC16).</td></tr>
+      <tr><th>Demais atores</th><td>Serviço de Pagamento (sistema externo).</td></tr>
+      <tr><th>Pré-condições</th><td>
+        <ol><li>Carrinho com ao menos um item disponível na unidade escolhida.</li>
+        <li>No App e na Web, cliente autenticado. No Totem, identificação por CPF é opcional.</li>
+        <li>Total do pedido calculado pela regra única de precificação (RN05 a RN07).</li></ol></td></tr>
+      <tr><th>Pós-condições</th><td>
+        <ol><li>Sucesso: pedido no status Recebido, visível na fila da cozinha; transação registrada; pontos creditados se o cliente participa do programa; código de retirada exibido.</li>
+        <li>Insucesso: pedido permanece Aguardando pagamento; nenhuma cobrança realizada; cliente informado do motivo e do próximo passo.</li></ol></td></tr>
+      <tr><th>Origem das informações</th><td>
+        <ol><li>Carrinho e unidade selecionada (interface);</li>
+        <li>Cardápio e estoque da unidade (plataforma);</li>
+        <li>Resposta do serviço de pagamento (sistema externo).</li></ol></td></tr>
+      <tr><th>Usuários responsáveis</th><td>Gerente da unidade (acompanha cancelamentos e estornos na auditoria).</td></tr>
+      <tr><th>Pendências</th><td>Estorno real junto ao serviço de pagamento depende da API do provedor escolhido pela rede; no protótipo o estorno é registrado na auditoria.</td></tr>
+      <tr><th>Fluxo base</th><td>
+        <ol><li>Sistema apresenta a tela de Pagamento com o resumo do pedido e as formas Pix, Cartão de crédito e Cartão de débito;</li>
+        <li>Cliente seleciona a *FORMA DE PAGAMENTO;</li>
+        <li>Cliente toca em *PAGAR E ENVIAR PEDIDO;</li>
+        <li>Sistema bloqueia o botão para impedir novo envio;</li>
+        <li>Sistema revalida a disponibilidade dos itens; [RN13]</li>
+        <li>Sistema cria o pedido no status Aguardando pagamento e gera uma chave de idempotência; [RN09]</li>
+        <li>Sistema envia ao Serviço de Pagamento a chave, o valor e a forma;</li>
+        <li>Sistema exibe "Aguardando confirmação do Pix" (ou "Processando pagamento") e o selo "Processado por serviço externo de pagamento";</li>
+        <li>Serviço de Pagamento responde Aprovado com o identificador da transação;</li>
+        <li>Sistema registra o resultado, muda o pedido para Recebido e credita os pontos; [RN07, RN08]</li>
+        <li>Sistema limpa o carrinho e apresenta a tela Acompanhar pedido com o código de retirada.</li></ol></td></tr>
+      <tr><th>Fluxos alternativos</th><td>
+        <p class="sem-recuo"><strong>FA1 Item esgotado (passo 5).</strong> Sistema exibe "Item esgotado: [nome]. Remova do carrinho para continuar." e não cria o pedido.</p>
+        <p class="sem-recuo"><strong>FA2 Pagamento recusado (passo 9).</strong> Sistema exibe "Pagamento recusado." com o motivo informado pelo serviço e "Tente outra forma de pagamento. Seu pedido continua reservado."; ao tentar de novo, gera nova chave. [RN09]</p>
+        <p class="sem-recuo"><strong>FA3 Sem resposta (passo 9).</strong> Após 8 segundos, sistema exibe "Tempo esgotado. O serviço de pagamento não respondeu a tempo. Nenhum valor foi cobrado." e permite nova tentativa com nova chave. [RN10]</p>
+        <p class="sem-recuo"><strong>FA4 Falha de comunicação (passo 7).</strong> Sistema exibe "Falha de comunicação. Não conseguimos falar com o serviço de pagamento. Você pode tentar de novo sem risco de cobrança duplicada."; a nova tentativa reutiliza a mesma chave, e o serviço devolve a resposta original em vez de cobrar de novo. [RN09]</p>
+        <p class="sem-recuo"><strong>FA5 Clique duplo (passo 3).</strong> O segundo toque é ignorado enquanto a solicitação está em andamento.</p></td></tr>
+      <tr><th>Regras de negócio</th><td>RN05 a RN10 e RN13 (ver [[q-rn]]).</td></tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>A [[f-sequencia]] mostra a troca de mensagens entre interface, plataforma, serviço externo e loja para o fluxo base e os fluxos alternativos FA2 a FA4. A proteção contra cobrança duplicada usa requisições idempotentes, prática adotada por provedores de pagamento (STRIPE, 2026). O ponto central é que a interface nunca supõe o resultado: ela mostra explicitamente o estado de espera e só confirma o pedido depois da resposta registrada.</p>
+
+<figure data-tipo="Figura" id="f-sequencia" data-largura="100%">
+  <figcaption>Diagrama de sequência do pagamento com o serviço externo</figcaption>
+  <img src="../diagramas/sequencia-pagamento.svg" alt="Diagrama de sequência do pagamento">
+</figure>
+
+<h2>Diagrama da jornada do usuário</h2>
+<p>A [[f-jornada]] mapeia o percurso do cliente desde a escolha da unidade até a retirada do pedido, em raias que separam o que é feito pelo cliente, pela interface, pela plataforma, pelo serviço de pagamento e pela loja. As etiquetas escuras indicam o estado do pedido após cada etapa, e as setas tracejadas indicam caminhos de recuperação de erro.</p>
+<p>Três decisões da jornada orientaram a interface. Na decisão <em>Identificado?</em>, o App pede login ou cadastro com consentimentos, enquanto o Totem oferece apenas o CPF opcional, porque exigir cadastro em uma tela pública aumentaria a fila. Na decisão <em>Resposta?</em>, cada saída tem uma tela própria: aprovado leva ao acompanhamento, recusa e falta de resposta voltam à escolha da forma com nova chave, e falha de rede reenvia com a mesma chave. Por fim, a etapa <em>Atualiza app e painel de chamada</em> fecha o ciclo multicanal: o status alterado pela cozinha aparece ao mesmo tempo no celular do cliente e na TV da loja.</p>
+
+<figure data-tipo="Figura" id="f-jornada" data-largura="100%" class="figura-pagina">
+  <figcaption>Diagrama da jornada do usuário, do cardápio à retirada</figcaption>
+  <img src="../diagramas/jornada.svg" alt="Diagrama de atividades em raias da jornada do usuário">
+</figure>
+
+<h2>Estados do pedido</h2>
+<p>O ciclo de vida do pedido ([[f-estados]]) é o mesmo em todos os canais e define o que cada perfil pode fazer em cada momento: a cozinha só avança pedidos pagos, o atendente só entrega pedidos prontos e o cancelamento é bloqueado depois da retirada. Cada transição grava data e hora no histórico do pedido, e é esse histórico que a linha do tempo do cliente exibe.</p>
+
+<figure data-tipo="Figura" id="f-estados" data-largura="52%">
+  <figcaption>Diagrama de estados do pedido</figcaption>
+  <img src="../diagramas/estados.svg" alt="Diagrama de estados do pedido">
+</figure>
+
+<h2 id="s-arquitetura">Arquitetura do front-end</h2>
+<p>A interface foi organizada em quatro camadas ([[f-arquitetura]]). As telas de cada canal usam componentes compartilhados, leem e alteram o estado da aplicação, e todo acesso a dados ou regra de negócio passa pela camada de serviços. Hoje essa camada responde com dados simulados e latência artificial; numa evolução, as mesmas funções passam a chamar a API da plataforma, sem mudança nas telas. Com isso, o protótipo serve como contrato de integração para a equipe de back-end.</p>
+
+<figure data-tipo="Figura" id="f-arquitetura" data-largura="92%">
+  <figcaption>Camadas da aplicação front-end</figcaption>
+  <img src="../diagramas/arquitetura.svg" alt="Diagrama de camadas da aplicação">
+</figure>
+
+<p>As tecnologias e o motivo de cada escolha estão no [[q-tecnologias]].</p>
+
+<figure data-tipo="Quadro" id="q-tecnologias">
+  <figcaption>Tecnologias adotadas e justificativa</figcaption>
+  <table>
+    <thead><tr><th style="width:24%">Tecnologia</th><th style="width:22%">Uso</th><th>Justificativa</th></tr></thead>
+    <tbody>
+      <tr><td>React 19 + TypeScript</td><td>Interface e tipagem</td><td>Componentes reutilizados entre canais (REACT, 2026); tipos do domínio (Pedido, Unidade, Consentimentos) evitam inconsistências entre telas</td></tr>
+      <tr><td>Vite</td><td>Build e servidor local</td><td>Build rápido e divisão automática do código por rota</td></tr>
+      <tr><td>React Router</td><td>Navegação</td><td>Rotas por canal com carregamento sob demanda do Totem e da Operação</td></tr>
+      <tr><td>Zustand</td><td>Estado</td><td>Estado simples e tipado; persistência opcional por loja (o carrinho do totem fica só em memória)</td></tr>
+      <tr><td>CSS próprio com variáveis</td><td>Estilo e identidade visual</td><td>Controle total do mobile-first e dos contrastes; sem dependência de biblioteca visual</td></tr>
+      <tr><td>Vitest e Playwright</td><td>Testes</td><td>Testes de unidade das regras e testes ponta a ponta em navegador real com capturas de tela</td></tr>
+      <tr><td>Vercel + GitHub</td><td>Publicação</td><td>Deploy automático a cada envio para o repositório, com HTTPS e CDN</td></tr>
+    </tbody>
+  </table>
+</figure>
+
+<h3>Design responsivo e identidade visual</h3>
+<p>Os estilos base foram escritos para telas de 360 px, e as media queries apenas ampliam o layout: a 640 px o cardápio passa a duas colunas, a 768 px a navegação inferior dá lugar ao menu no topo e a unidade aparece no cabeçalho, e a 896 px o checkout passa a duas colunas, com o resumo fixo ao lado. O totem usa um layout próprio, pensado para tela vertical de toque, com fonte maior e alvos de 72 px.</p>
+<p>A identidade visual foi inspirada na xilogravura de cordel, com contornos escuros, sombra deslocada e uma paleta de barro, sol e mandacaru. As combinações de cor usadas em texto foram verificadas quanto ao contraste mínimo de 4,5:1 da WCAG 2.1 (ver [[q-lighthouse]]). A tipografia combina Fraunces nos títulos e Work Sans no texto, e foram carregados apenas os caracteres latinos, o que reduz o download.</p>
+
+<h3>Performance e escalabilidade</h3>
+<p>O código do Totem e da Operação é carregado apenas quando essas rotas são abertas, de modo que o cliente no celular baixa somente o necessário para pedir: cerca de 116 kB de JavaScript comprimido. As listas exibem esqueletos de carregamento com a mesma forma do conteúdo, evitando saltos de layout. Unidades, produtos, estoques, campanhas e recompensas são dados: a entrada de uma nova loja ou de uma campanha junina não exige alteração de código de interface.</p>

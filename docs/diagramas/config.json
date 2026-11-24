@@ -1,0 +1,1 @@
+{ "theme": "neutral", "themeVariables": { "fontFamily": "Arial, Liberation Sans, sans-serif", "fontSize": "14px" }, "sequence": { "mirrorActors": false, "actorMargin": 40, "messageFontSize": 13, "noteFontSize": 12 } }

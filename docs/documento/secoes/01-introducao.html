@@ -1,0 +1,40 @@
+<h1 id="s-intro">Introdução</h1>
+
+<h2>Contexto e problema</h2>
+<p>A Raízes do Nordeste nasceu como uma lanchonete familiar em Recife e se tornou uma rede em expansão, com unidades em capitais e cidades do interior. O cardápio de tapiocas, cuscuz, bolos regionais e cafés da manhã atende tanto quem passa antes do expediente quanto famílias nos fins de semana. O crescimento trouxe um problema típico de redes: o mesmo cliente chega por canais diferentes (aplicativo, totem de autoatendimento, balcão e retirada rápida) e espera a mesma experiência em todos eles: ver o cardápio da unidade, escolher o que está disponível ali, pedir, acompanhar e retirar sem erro (ALMEIDA <em>et al.</em>, 2026).</p>
+<p>Três características do negócio tornam essa experiência difícil de padronizar. Primeiro, as unidades não são iguais: há lojas com cozinha completa e lojas em formato reduzido, estoque controlado localmente, produtos sazonais do período junino e receitas que variam por região. Segundo, o programa de fidelização planejado pela empresa depende de dados pessoais, mas a diretoria estabeleceu que o consentimento explícito e a conformidade com a Lei Geral de Proteção de Dados Pessoais (LGPD) são obrigatórios. Terceiro, o pagamento é processado por um serviço externo: o sistema da rede apenas solicita, recebe a resposta, registra e atualiza o pedido, o que exige tratar recusas, demoras e falhas de comunicação sem cobrar o cliente duas vezes.</p>
+<p>Este trabalho apresenta a solução de interface (front-end) para esse cenário, desenvolvida na trilha Front-end do Projeto Multidisciplinar, pela Opção B: codificação de uma aplicação funcional publicada na internet, com dados simulados (ALMEIDA, 2026).</p>
+
+<h2>Objetivos</h2>
+<p>O objetivo geral é projetar e implementar uma interface multicanal para a rede Raízes do Nordeste que permita ao cliente pedir e pagar por aplicativo, site ou totem, e à equipe da loja preparar, entregar e auditar esses pedidos, respeitando as diferenças entre unidades e a LGPD.</p>
+<p>Os objetivos específicos são:</p>
+<ol class="lista-alfa">
+  <li>levantar requisitos funcionais e não funcionais a partir do estudo de caso, com justificativa e priorização;</li>
+  <li>modelar a solução por meio de diagrama de casos de uso, descrição de feature, jornada do usuário e estados do pedido;</li>
+  <li>validar a arquitetura de informação com wireframes de baixa fidelidade para celular, computador e totem;</li>
+  <li>implementar a interface em React com dados simulados e um serviço de pagamento externo simulado, publicada em URL pública;</li>
+  <li>aplicar a LGPD de forma visível na interface: avisos, consentimento granular, finalidade de cada dado e direitos do titular;</li>
+  <li>verificar a qualidade com cenários de teste automatizados, positivos e negativos, cobrindo usabilidade, responsividade e privacidade.</li>
+</ol>
+
+<h2>Usuários e canais</h2>
+<p>A solução atende cinco atores, os mesmos exigidos no diagrama de casos de uso. O <strong>cliente</strong> usa o aplicativo e o site (mesma aplicação responsiva) ou o totem da loja. O <strong>atendente</strong> registra pedidos no balcão, entrega e cancela. A <strong>cozinha</strong> acompanha a fila de preparo. O <strong>gerente</strong> acumula as permissões da equipe e consulta indicadores e auditoria. O <strong>serviço de pagamento externo</strong> é um sistema que responde às solicitações de cobrança. O [[q-canais]] resume o que cada canal oferece e as restrições de projeto de cada um.</p>
+
+<figure data-tipo="Quadro" id="q-canais">
+  <figcaption>Canais de atendimento e decisões de interface</figcaption>
+  <table>
+    <thead><tr><th>Canal</th><th>Quem usa</th><th>Contexto de uso</th><th>Decisões de interface</th></tr></thead>
+    <tbody>
+      <tr><td>App e Web</td><td>Cliente</td><td>Celular, em trânsito ou em casa; pedido antecipado para retirada</td><td>Mobile-first; conta obrigatória para pagar (vincula o pedido e os pontos); navegação inferior com 4 atalhos; carrinho persistente</td></tr>
+      <tr><td>Totem</td><td>Cliente</td><td>Tela de toque compartilhada dentro da loja, uso rápido e em pé</td><td>Sem cadastro; alvos de toque de 72 px; CPF opcional e oculto; teclado na tela; sessão apagada após 60 s sem uso; nada salvo no aparelho</td></tr>
+      <tr><td>Balcão</td><td>Atendente</td><td>Computador ou tablet no caixa, fila de clientes</td><td>Grade de produtos em um toque; apenas primeiro nome para chamada; cancelamento com motivo obrigatório</td></tr>
+      <tr><td>Cozinha</td><td>Cozinha</td><td>Tela fixa na cozinha, leitura à distância</td><td>Colunas por status, mais antigo primeiro; destaque para atraso acima de 15 min; um botão por etapa</td></tr>
+      <tr><td>Gestão</td><td>Gerente</td><td>Escritório ou celular do gerente</td><td>Somente dados agregados; filtro por unidade; trilha de auditoria</td></tr>
+      <tr><td>Painel de chamada</td><td>Clientes na loja</td><td>TV da loja</td><td>Somente códigos de retirada, nunca nomes</td></tr>
+    </tbody>
+  </table>
+</figure>
+
+<h2>Relevância e escopo</h2>
+<p>O estudo de caso destaca que a indisponibilidade nos horários de pico afeta diretamente faturamento, operação e imagem da marca. Na interface, isso se traduz em telas que continuam utilizáveis com rede lenta, em mensagens claras quando o pagamento falha e em proteção contra pedidos e cobranças duplicados. A fidelização, por sua vez, só gera valor se o cliente confiar na marca, e por isso a privacidade é tratada como parte da experiência, não como um aviso legal no rodapé.</p>
+<p>O escopo deste trabalho é a camada de apresentação. O back-end é representado por uma camada de serviços que usa dados simulados e reproduz latência e falhas; o pagamento é simulado e nenhum valor é cobrado. Essa separação foi feita de propósito: as telas dependem apenas dos contratos dos serviços, o que permite substituir a simulação pela API real sem reescrever a interface (ver [[s-arquitetura]]).</p>

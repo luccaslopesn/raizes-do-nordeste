@@ -1,0 +1,31 @@
+sequenceDiagram
+    autonumber
+    actor C as Cliente
+    participant I as Interface
+    participant P as Plataforma
+    participant G as Serviço de<br/>Pagamento
+    participant L as Cozinha
+    C->>I: Toca "Pagar"
+    I->>I: Bloqueia o botão
+    I->>P: Criar pedido
+    P->>P: Revalida estoque
+    P-->>I: Aguardando pagto. + chave
+    I->>G: Solicitar (chave, valor, forma)
+    I-->>C: "Aguardando resposta"
+    alt aprovado
+        G-->>P: Aprovado (id)
+        P->>P: Recebido + pontos
+        P-->>L: Entra na fila
+        P-->>I: Confirmado
+        I-->>C: Código de retirada
+    else recusado
+        G-->>P: Recusado (motivo)
+        P-->>I: Recusado
+        I-->>C: Motivo, nova chave
+    else sem resposta em 8 s
+        I->>I: Tempo limite
+        I-->>C: "Nada foi cobrado"
+    else falha de comunicação
+        I->>G: Reenvia, mesma chave
+        G-->>I: Resposta original
+    end

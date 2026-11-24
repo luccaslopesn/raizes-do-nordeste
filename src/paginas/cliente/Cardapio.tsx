@@ -66,6 +66,7 @@ export function Cardapio() {
 
       {erro && <div className="aviso aviso-erro" role="alert"><p>Erro ao carregar o cardápio. <button className="botao botao-texto" onClick={recarregar}>Tentar de novo</button></p></div>}
 
+      <h2 className="visualmente-oculto">Produtos</h2>
       <div className="grade grade-2" aria-busy={carregando}>
         {carregando && [1, 2, 3, 4, 5, 6].map((i) => <div key={i} className="esqueleto" style={{ height: 150 }} />)}
         {!carregando && visiveis.map((item) => (

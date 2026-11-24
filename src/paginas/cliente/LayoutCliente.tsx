@@ -29,7 +29,7 @@ export function LayoutCliente() {
       <a href="#conteudo" className="pular-para-conteudo">Pular para o conteúdo</a>
       <header className="cabecalho">
         <div className="container cabecalho-conteudo">
-          <Link to="/app" className="cabecalho-marca" aria-label="Raízes do Nordeste, início"><Logo tamanho={36} /></Link>
+          <Link to="/app" className="cabecalho-marca" aria-label="Raízes do Nordeste (página inicial)"><Logo tamanho={36} /></Link>
 
           {unidade && (
             <Link to="/app" className="cabecalho-unidade" title="Trocar unidade">

@@ -31,7 +31,7 @@ Fonte: Roteiro de Atividade Prática rev 0.6 + Estudo de Caso rev 0.3.
 ## Documento PDF (arquivo único, `RU_Projeto_Front_End.pdf`)
 - [ ] Capa: curso, disciplina, nome, RU, polo, semestre, professor
 - [ ] Sumário
-- [ ] Introdução: contexto, objetivos, usuários, relevância
+- [x] Introdução: contexto, objetivos, usuários, relevância
 - [ ] Análise e requisitos: RF e RNF (tabela, com justificativa e priorização)
 - [ ] Diagrama de casos de uso com atores: Cliente, Atendente, Cozinha, Gerente/Administrador, Sistema de Pagamento Externo
 - [ ] Descrição de feature (ex.: Realizar Pagamento): fluxo principal, pré-condições, processamento externo

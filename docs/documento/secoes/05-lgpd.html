@@ -1,0 +1,47 @@
+<h1>LGPD e privacidade na interface</h1>
+<p>A diretoria da rede resumiu a diretriz em uma frase do estudo de caso: conhecer o cliente é importante, mas respeitar sua privacidade é obrigatório. Na interface, isso significa que a LGPD (BRASIL, 2018) não fica restrita a um texto jurídico. Ela aparece no momento em que o dado é pedido, com a finalidade ao lado, e pode ser revista pelo titular a qualquer momento.</p>
+
+<h2>Princípios aplicados</h2>
+<p>O [[q-lgpd]] relaciona os princípios e direitos da lei a elementos concretos da interface e ao teste que os verifica.</p>
+
+<figure data-tipo="Quadro" id="q-lgpd" class="quadro-longo">
+  <figcaption>Aplicação da LGPD na interface</figcaption>
+  <table>
+    <thead><tr><th style="width:22%">Princípio ou direito (LGPD)</th><th style="width:46%">Como aparece na interface</th><th style="width:18%">Tela</th><th>Teste</th></tr></thead>
+    <tbody>
+      <tr><td>Consentimento livre, informado e inequívoco (art. 8º)</td><td>Três consentimentos separados no cadastro; apenas os termos são obrigatórios; fidelidade e ofertas começam desmarcados e trazem a explicação de uso</td><td>Cadastro</td><td>CT09, CT10</td></tr>
+      <tr><td>Revogação do consentimento (art. 8º, § 5º)</td><td>Interruptores na Central de Privacidade, com data da última alteração; revogar a fidelidade apaga a data de nascimento</td><td>Central de Privacidade</td><td>CT11</td></tr>
+      <tr><td>Finalidade e transparência (art. 6º, I e VI)</td><td>Dica de uso em cada campo do cadastro; tabela "Seus dados" mostra valor e motivo de cada dado; política em linguagem simples</td><td>Cadastro, Central, Política</td><td>CT10, CT11</td></tr>
+      <tr><td>Necessidade (art. 6º, III)</td><td>Telefone opcional; data de nascimento só pedida e guardada com adesão à fidelidade; balcão pede apenas o primeiro nome e orienta a não pedir CPF ou telefone</td><td>Cadastro, Balcão</td><td>CT10</td></tr>
+      <tr><td>Livre acesso e portabilidade (art. 18, II e V)</td><td>Botão "Baixar meus dados" gera arquivo com dados pessoais e pedidos, sem a senha e sem dados de transação</td><td>Central de Privacidade</td><td>verificação manual</td></tr>
+      <tr><td>Eliminação (art. 18, VI)</td><td>"Excluir minha conta" com diálogo de confirmação que explica o que é apagado e o que é mantido de forma anônima por obrigação fiscal</td><td>Central de Privacidade</td><td>verificação manual</td></tr>
+      <tr><td>Cookies e coleta não essencial</td><td>Aviso na primeira visita, conforme orientação da ANPD (AUTORIDADE NACIONAL DE PROTEÇÃO DE DADOS, 2022); nada além do essencial antes da escolha; "Só essenciais" com o mesmo peso de "Aceitar"; preferência alterável depois</td><td>Banner, Central</td><td>CT01</td></tr>
+      <tr><td>Segurança e prevenção (art. 6º, VII e VIII; art. 46)</td><td>CPF do totem oculto na tela e não armazenado; sessão do totem apagada por inatividade; senha com regras mínimas; login não revela se o e-mail existe; dados de cartão nunca digitados na interface da rede</td><td>Totem, Entrar</td><td>CT12, CT16, CT18, CT19</td></tr>
+      <tr><td>Anonimização e minimização no acesso interno</td><td>Cozinha, balcão e painel de chamada veem código e primeiro nome; painel do gerente só com dados agregados</td><td>Operação</td><td>CT05, CT13</td></tr>
+      <tr><td>Responsabilização e auditoria (art. 6º, X; art. 37)</td><td>Acesso por perfil; cancelamentos, descontos e resgates registrados com perfil, data, pedido e motivo</td><td>Balcão, Gestão</td><td>CT13, CT20</td></tr>
+    </tbody>
+  </table>
+</figure>
+
+<h2>Pontos de contato na interface</h2>
+<p>A [[f-lgpd]] mostra os três momentos em que o cliente decide sobre os próprios dados no App e na Web: na primeira visita (cookies), no cadastro (consentimentos) e a qualquer momento depois (Central de Privacidade). No Totem, a decisão acontece na tela de CPF, já apresentada na [[f-implementada-2]].</p>
+
+<figure data-tipo="Figura" id="f-lgpd">
+  <figcaption>LGPD na interface: aviso de cookies, consentimentos no cadastro e Central de Privacidade</figcaption>
+  <div class="painel painel-3">
+    <div><img src="../img/tela-01-app-unidades-banner-cookies.jpg" alt=""><span>(a) Aviso de cookies</span></div>
+    <div><img src="../img/tela-13-cadastro-consentimentos.jpg" alt=""><span>(b) Consentimentos e finalidade</span></div>
+    <div><img src="../img/tela-14-central-privacidade.jpg" alt=""><span>(c) Central de Privacidade</span></div>
+  </div>
+</figure>
+
+<h2>Acesso da equipe e auditoria</h2>
+<p>O estudo de caso exige auditoria de operações sensíveis. Na interface, o cancelamento só é concluído com a escolha de um motivo, e o diálogo avisa que a ação ficará registrada. O registro aparece imediatamente na trilha de auditoria do gerente ([[f-auditoria]]), com perfil, data, código do pedido e motivo. O controle de acesso impede que um perfil abra áreas que não lhe pertencem: a cozinha que tenta acessar a gestão recebe a mensagem "O perfil Cozinha não tem acesso a Gestão".</p>
+
+<figure data-tipo="Figura" id="f-auditoria">
+  <figcaption>Cancelamento com motivo obrigatório e registro na trilha de auditoria</figcaption>
+  <div class="painel painel-1">
+    <div><img src="../img/tela-25-balcao-cancelamento.jpg" alt=""><span>(a) Diálogo de cancelamento no balcão</span></div>
+    <div><img src="../img/tela-26-auditoria-cancelamento.jpg" alt=""><span>(b) Registro na auditoria do gerente</span></div>
+  </div>
+</figure>

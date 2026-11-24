@@ -1,0 +1,18 @@
+stateDiagram-v2
+    [*] --> AguardandoPagamento: cliente confirma
+    state "Aguardando pagamento" as AguardandoPagamento
+    state "Recebido" as Recebido
+    state "Em preparo" as EmPreparo
+    state "Pronto" as Pronto
+    state "Retirado" as Retirado
+    state "Cancelado" as Cancelado
+    AguardandoPagamento --> AguardandoPagamento: recusado / expirado<br/>(nova tentativa)
+    AguardandoPagamento --> Recebido: pagamento aprovado<br/>(+ pontos)
+    Recebido --> EmPreparo: cozinha inicia
+    EmPreparo --> Pronto: cozinha conclui
+    Pronto --> Retirado: balcão entrega
+    Recebido --> Cancelado: atendente/gerente<br/>(motivo + auditoria)
+    EmPreparo --> Cancelado
+    Pronto --> Cancelado
+    Retirado --> [*]
+    Cancelado --> [*]

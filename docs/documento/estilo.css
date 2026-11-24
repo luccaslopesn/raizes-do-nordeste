@@ -1,0 +1,85 @@
+/* Formatação baseada na ABNT NBR 14724: A4, margens 3/2/2/3 cm, fonte 12 pt, espaçamento 1,5 */
+@page { size: A4; margin: 3cm 2cm 2cm 3cm; }
+
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { margin: 0; font-family: Arial, 'Liberation Sans', Helvetica, sans-serif; font-size: 12pt; line-height: 1.5; color: #000; }
+p { margin: 0; text-align: justify; text-indent: 1.25cm; hyphens: auto; }
+p.sem-recuo, .sem-recuo p { text-indent: 0; }
+a { color: #000; text-decoration: none; }
+code { font-family: 'DejaVu Sans Mono', monospace; font-size: 10pt; }
+strong { font-weight: 700; }
+
+.pagina { break-after: page; }
+.marca { color: transparent; font-size: 1pt; line-height: 0; text-transform: none; }
+
+/* ---------- Títulos (NBR 6024) ---------- */
+h1, h2, h3 { font-size: 12pt; margin: 0; line-height: 1.5; break-after: avoid; text-align: left; }
+h1 { font-weight: 700; text-transform: uppercase; break-before: page; margin-bottom: 18pt; }
+h2 { font-weight: 400; text-transform: uppercase; margin: 18pt 0 12pt; }
+h3 { font-weight: 700; margin: 14pt 0 8pt; }
+h1.centralizado, .titulo-pre { text-align: center; }
+.titulo-pre { font-weight: 700; text-transform: uppercase; margin: 0 0 18pt; font-size: 12pt; }
+.num { margin-right: 0.5em; }
+
+/* ---------- Listas ---------- */
+ol, ul { margin: 6pt 0 6pt 1.25cm; padding-left: 0.6cm; }
+li { text-align: justify; }
+ol.lista-alfa { list-style: lower-alpha; list-style-type: lower-alpha; }
+ol.lista-alfa > li::marker { content: counter(list-item, lower-alpha) ") "; }
+
+/* ---------- Figuras e quadros ---------- */
+figure { margin: 12pt 0; break-inside: avoid; text-align: center; }
+figcaption { font-size: 10pt; line-height: 1.2; text-align: center; margin: 0 auto 6pt; max-width: 15cm; }
+figure img { max-width: 100%; display: block; margin: 0 auto; }
+.fonte { font-size: 10pt; line-height: 1.2; text-align: left; margin-top: 4pt; text-indent: 0; }
+figure.figura-pagina img { max-height: 21.5cm; width: auto !important; }
+
+figure table { width: 100%; border-collapse: collapse; font-size: 10pt; line-height: 1.2; text-align: left; }
+figure th, figure td { border: 1px solid #000; padding: 3pt 4pt; vertical-align: top; text-align: left; }
+figure thead th { background: #e6e6e6; font-weight: 700; }
+figure.quadro-longo { break-inside: auto; }
+figure.quadro-longo thead { display: table-header-group; }
+figure.quadro-longo tr { break-inside: avoid; }
+figure.quadro-uc th { background: #efefef; width: 22%; }
+figure.quadro-uc td ol { margin: 0 0 0 0.2cm; padding-left: 0.45cm; }
+figure.quadro-uc td p { margin: 0 0 3pt; text-indent: 0; text-align: left; }
+figure.quadro-testes td { font-size: 9pt; }
+
+.painel { display: grid; gap: 8pt; align-items: start; }
+.painel > div { display: flex; flex-direction: column; align-items: center; gap: 3pt; }
+.painel span { font-size: 9pt; line-height: 1.15; }
+.painel img { border: 0.6pt solid #888; }
+.painel-1 { grid-template-columns: 1fr; }
+.painel-1 img { max-height: 9.6cm; }
+.painel-3 { grid-template-columns: repeat(3, 1fr); }
+.painel-3 img { max-height: 10.6cm; }
+.painel-4 { grid-template-columns: repeat(4, 1fr); }
+.painel-4 img { max-height: 8.2cm; }
+.painel-resp { grid-template-columns: 0.75fr 1.25fr 2fr; align-items: end; }
+img.recorte { max-height: 10.6cm; object-fit: cover; object-position: top; }
+
+/* ---------- Pré-textuais ---------- */
+.capa, .rosto { height: 24.6cm; display: flex; flex-direction: column; text-align: center; font-weight: 700; text-transform: uppercase; }
+.capa .topo, .rosto .topo { line-height: 1.5; }
+.capa .meio, .rosto .meio { margin-top: auto; margin-bottom: auto; }
+.capa .titulo, .rosto .titulo { font-size: 12pt; }
+.capa .subtitulo, .rosto .subtitulo { font-weight: 400; text-transform: none; margin-top: 6pt; }
+.capa .base, .rosto .base { line-height: 1.5; }
+.rosto .natureza { margin: 24pt 0 0 8cm; text-align: justify; font-weight: 400; text-transform: none; font-size: 10pt; line-height: 1.2; }
+.resumo p { text-indent: 0; }
+.palavras { margin-top: 12pt; text-indent: 0; }
+
+.lista { line-height: 1.5; }
+.lista .item { display: flex; align-items: flex-end; gap: 4pt; }
+.lista .item .rot { flex: 0 1 auto; }
+.lista .item .pontos { flex: 1 0 1.2cm; border-bottom: 1.4px dotted #000; margin-bottom: 5pt; }
+.lista .item .pag { flex: 0 0 auto; }
+.lista .nivel-1 { font-weight: 700; text-transform: uppercase; }
+.lista .nivel-2 { text-transform: uppercase; }
+.lista .nivel-3 { font-weight: 700; }
+.lista .num-sum { display: inline-block; min-width: 1.4cm; }
+.siglas .item { display: grid; grid-template-columns: 2.6cm 1fr; }
+
+/* ---------- Referências (NBR 6023) ---------- */
+.referencias p { text-indent: 0; text-align: left; line-height: 1.0; margin-bottom: 12pt; }
+figure td li, figure td p { text-align: left; hyphens: manual; }

@@ -1,0 +1,128 @@
+<h1 id="s-testes">Plano de testes e evidências</h1>
+
+<h2>Estratégia</h2>
+<p>A qualidade da interface foi verificada em quatro frentes complementares, com mais testes automatizados nas regras que mudam com frequência e mais testes de ponta a ponta nos fluxos que geram receita ou envolvem dados pessoais:</p>
+<ol class="lista-alfa">
+  <li><strong>testes de unidade</strong> (Vitest) das regras de negócio isoladas da tela: cardápio por unidade, precificação, pontos, campanhas, validação de CPF e comportamento do serviço de pagamento;</li>
+  <li><strong>testes ponta a ponta</strong> (Playwright) em navegador Chromium real, executando os fluxos como um usuário faria, com capturas de tela como evidência. Cobrem usabilidade dos fluxos, mensagens de erro, integração com o serviço externo, LGPD, controle de acesso, responsividade e teclado;</li>
+  <li><strong>auditoria automatizada</strong> (Lighthouse) de performance, acessibilidade e boas práticas no perfil de celular;</li>
+  <li><strong>inspeção heurística</strong> da usabilidade com base nas dez heurísticas de Nielsen (1994), aplicada pelo autor sobre os wireframes e a interface.</li>
+</ol>
+<p>Os cenários foram escolhidos a partir dos riscos do estudo de caso: no horário de pico, o que mais prejudica a loja é cobrança duplicada, pedido de item esgotado, cliente sem saber se pagou e fila travada no totem. Por isso, os fluxos alternativos do pagamento (recusa, demora, falha de rede e clique duplo) têm um teste cada.</p>
+<p>Ambiente: build de produção servido localmente; Chromium; janelas de 390 × 844 px (celular), 540 × 960 px (totem em pé), 1280 × 800 px (operação) e 360, 768 e 1280 px (responsividade). Execução em 24 de novembro de 2026. Os comandos para repetir os testes estão no README do repositório.</p>
+
+<h2>Cenários de teste</h2>
+<p>O [[q-cenarios]] descreve os 21 cenários ponta a ponta (o CT14 roda em três larguras, totalizando 23 execuções), com pré-condição, entrada, passos e saída esperada, incluindo o texto exato das mensagens de erro. Todos foram executados de forma automatizada.</p>
+
+<figure data-tipo="Quadro" id="q-cenarios" class="quadro-longo quadro-testes">
+  <figcaption>Cenários de teste da interface</figcaption>
+  <table>
+    <thead><tr><th style="width:6%">ID</th><th style="width:13%">Tipo</th><th style="width:27%">Pré-condição, entrada e passos</th><th style="width:44%">Resultado esperado</th><th style="width:10%">Situação</th></tr></thead>
+    <tbody>
+      <tr><td>CT01</td><td>Positivo · LGPD</td><td>Primeira visita. Abrir /app e tocar "Só essenciais".</td><td>Aviso "Sua privacidade" exibido antes de qualquer coleta opcional; some após a escolha; preferência salva.</td><td>Aprovado</td></tr>
+      <tr><td>CT02</td><td>Positivo · Regra</td><td>Abrir o cardápio da unidade São Paulo · Av. Paulista (formato reduzido).</td><td>Pratos que exigem cozinha completa não aparecem; tapiocas aparecem; texto "Unidade com cozinha reduzida".</td><td>Aprovado</td></tr>
+      <tr><td>CT03</td><td>Negativo · Regra</td><td>Recife, estoque do Cuscuz com charque igual a zero. Abrir o cardápio.</td><td>Selo "Esgotado nesta unidade"; botão "Indisponível" desabilitado.</td><td>Aprovado</td></tr>
+      <tr><td>CT04</td><td>Positivo · Fluxo completo</td><td>Conta demo (180 pontos). Adicionar 2 tapiocas de carne de sol e 1 suco de cajá; entrar; escolher "Café coado grátis"; pagar com Pix.</td><td>Tela "Aguardando confirmação do Pix" com selo de serviço externo; em seguida "Pedido recebido", código de retirada e pontos ganhos.</td><td>Aprovado</td></tr>
+      <tr><td>CT05</td><td>Positivo · Integração</td><td>Pedido do CT04 pago. Em outra aba, entrar como Cozinha (PIN 1234), "Iniciar preparo" e "Marcar como pronto".</td><td>A tela do cliente muda para "Em preparo" e "Pronto para retirada" sem recarregar.</td><td>Aprovado</td></tr>
+      <tr><td>CT06</td><td>Negativo · Integração</td><td>Endereço com ?pagamento=recusar. Cartão de crédito; pagar.</td><td>"Pagamento recusado. Pagamento não autorizado pelo emissor" e "Tente outra forma de pagamento. Seu pedido continua reservado."</td><td>Aprovado</td></tr>
+      <tr><td>CT07</td><td>Negativo · Integração</td><td>Pedido aguardando pagamento. Clique duplo em "Pagar".</td><td>Apenas um pedido aprovado (uma única cobrança).</td><td>Aprovado</td></tr>
+      <tr><td>CT08</td><td>Negativo · Integração</td><td>Endereço com ?pagamento=expirar. Pagar.</td><td>Após 8 s: "Tempo esgotado. O serviço de pagamento não respondeu a tempo. Nenhum valor foi cobrado."</td><td>Aprovado</td></tr>
+      <tr><td>CT09</td><td>Negativo · LGPD · Validação</td><td>Cadastro. E-mail "email-invalido"; termos não aceitos; "Criar conta".</td><td>Consentimentos opcionais desmarcados por padrão; "Informe um e-mail válido, como nome@exemplo.com."; "Para criar a conta, aceite os Termos de Uso e a Política de Privacidade."; conta não criada.</td><td>Aprovado</td></tr>
+      <tr><td>CT10</td><td>Positivo · LGPD</td><td>Cadastro com nome, e-mail válido, senha "senha1234" confirmada, termos aceitos e fidelidade marcada.</td><td>Campo de nascimento aparece com "Finalidade: liberar o benefício do mês do seu aniversário"; conta criada e sessão iniciada.</td><td>Aprovado</td></tr>
+      <tr><td>CT11</td><td>Positivo · LGPD</td><td>Conta do CT10. Central de Privacidade; desmarcar "Programa de fidelidade".</td><td>Nascimento passa a "Não guardado"; data da última alteração atualizada.</td><td>Aprovado</td></tr>
+      <tr><td>CT12</td><td>Positivo · Totem · LGPD</td><td>Totem de Recife. Tapioca de carne de sol e suco de graviola; CPF 529.982.247-25; débito; pagar.</td><td>CPF exibido como "•••.•••.•••-25"; aviso de pontos para o CPF final 25; "Pedido confirmado!" com senha de retirada.</td><td>Aprovado</td></tr>
+      <tr><td>CT13</td><td>Negativo e positivo · Acesso</td><td>Perfil Cozinha abre /gestao; depois entrar como Gerente.</td><td>Cozinha: "Acesso negado". Gerente: faturamento, pedidos por canal, mais vendidos e auditoria.</td><td>Aprovado</td></tr>
+      <tr><td>CT14</td><td>Positivo · Responsividade</td><td>Cardápio de Recife em 360, 768 e 1280 px.</td><td>Nenhuma rolagem horizontal nas três larguras.</td><td>Aprovado (3/3)</td></tr>
+      <tr><td>CT15</td><td>Positivo · Acessibilidade</td><td>Abrir /app e pressionar Tab.</td><td>Primeiro foco no link "Pular para o conteúdo".</td><td>Aprovado</td></tr>
+      <tr><td>CT16</td><td>Negativo · Segurança</td><td>Entrar com demo@raizes.com.br e senha "errada123".</td><td>"E-mail ou senha incorretos.", sem indicar qual dos dois está errado.</td><td>Aprovado</td></tr>
+      <tr><td>CT17</td><td>Negativo · Segurança</td><td>Operação com PIN "0000".</td><td>"PIN incorreto." e acesso não liberado.</td><td>Aprovado</td></tr>
+      <tr><td>CT18</td><td>Negativo · Validação</td><td>Totem com CPF 123.456.789-00.</td><td>"CPF inválido. Confira os números."</td><td>Aprovado</td></tr>
+      <tr><td>CT19</td><td>Negativo · Privacidade</td><td>Totem com item no carrinho; 60 s sem toque e mais 15 s.</td><td>Aviso "Ainda está aí?" com contagem; depois volta ao descanso com carrinho vazio.</td><td>Aprovado</td></tr>
+      <tr><td>CT20</td><td>Positivo · Auditoria</td><td>Gerente no balcão registra e cobra uma tapioca de coco; cancela com motivo "Pedido duplicado"; abre Gestão.</td><td>Registro de cancelamento com perfil, código do pedido e motivo na trilha de auditoria.</td><td>Aprovado</td></tr>
+      <tr><td>CT21</td><td>Negativo · Integração</td><td>Endereço com ?pagamento=instavel. Pagar; depois "Tentar novamente".</td><td>Primeira tentativa: "Falha de comunicação." com orientação; segunda tentativa, com a mesma chave, aprovada.</td><td>Aprovado</td></tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>Os testes de unidade ([[q-unidade]]) verificam as regras isoladamente, incluindo situações difíceis de reproduzir pela tela, como o desconto de aniversário e o limite da recompensa.</p>
+
+<figure data-tipo="Quadro" id="q-unidade">
+  <figcaption>Testes de unidade das regras de negócio</figcaption>
+  <table>
+    <thead><tr><th style="width:26%">Módulo</th><th>Verificações</th><th style="width:12%">Testes</th></tr></thead>
+    <tbody>
+      <tr><td>Cardápio por unidade</td><td>Oculta pratos de cozinha completa na unidade reduzida (RN01); esgotado visível e desabilitado (RN02); itens juninos só na janela (RN03)</td><td>3</td></tr>
+      <tr><td>Serviço de pagamento</td><td>Aprovação com identificador; mesma chave não gera segunda cobrança; recusa com motivo; expiração por tempo limite (RN09, RN10)</td><td>4</td></tr>
+      <tr><td>Precificação</td><td>Sem pontos sem adesão; 1 ponto por real e dobro antes das 9h; campanha segmentada só com consentimento; desconto de aniversário; campanha local só na unidade; total nunca negativo (RN05 a RN07)</td><td>6</td></tr>
+      <tr><td>CPF</td><td>Dígitos verificadores; máscara de exibição e de digitação</td><td>2</td></tr>
+    </tbody>
+  </table>
+</figure>
+
+<h2>Resultados</h2>
+<p>Na última execução, os 23 testes ponta a ponta e os 15 testes de unidade foram aprovados, sem nenhum erro registrado no console do navegador. A auditoria do Lighthouse, no perfil de celular com rede e processador limitados, teve os resultados do [[q-lighthouse]], que atendem às metas dos requisitos RNF03 e RNF06.</p>
+
+<figure data-tipo="Quadro" id="q-lighthouse">
+  <figcaption>Resultados da auditoria Lighthouse (celular)</figcaption>
+  <table>
+    <thead><tr><th>Tela</th><th>Performance</th><th>Acessibilidade</th><th>Boas práticas</th><th>LCP</th><th>CLS</th><th>TBT</th></tr></thead>
+    <tbody>
+      <tr><td>Cardápio da unidade</td><td>95</td><td>100</td><td>100</td><td>2,3 s</td><td>0</td><td>100 ms</td></tr>
+      <tr><td>Cadastro</td><td>95</td><td>100</td><td>100</td><td>2,4 s</td><td>0</td><td>90 ms</td></tr>
+    </tbody>
+  </table>
+</figure>
+<p>A primeira auditoria identificou três problemas que foram corrigidos antes da entrega: contraste insuficiente no cartão de produto esgotado (causado por transparência), títulos fora de ordem no cardápio e deslocamento de layout de 0,11 provocado pelo aviso de cookies ao carregar a fonte. Depois das correções, a acessibilidade passou de 94 para 100 e o deslocamento de layout caiu para zero.</p>
+
+<h2>Inspeção heurística de usabilidade</h2>
+<p>O [[q-heuristicas]] registra como cada heurística de Nielsen (1994) foi atendida. Como próximo passo, recomenda-se um teste de usabilidade com cinco clientes reais por canal, com três tarefas cronometradas (fazer um pedido com recompensa, recuperar um pagamento recusado e revogar um consentimento), medindo taxa de sucesso, tempo e número de erros.</p>
+
+<figure data-tipo="Quadro" id="q-heuristicas" class="quadro-longo">
+  <figcaption>Inspeção heurística da interface</figcaption>
+  <table>
+    <thead><tr><th style="width:32%">Heurística</th><th>Como a interface atende</th></tr></thead>
+    <tbody>
+      <tr><td>Visibilidade do estado do sistema</td><td>Estado de espera do pagamento; linha do tempo do pedido com horários; contador do carrinho; esqueletos de carregamento</td></tr>
+      <tr><td>Correspondência com o mundo real</td><td>Termos do balcão ("código de retirada", "pronto para retirada"); categorias do cardápio como no salão</td></tr>
+      <tr><td>Controle e liberdade do usuário</td><td>"Cancelar pedido" sempre visível no totem; "Trocar unidade"; remover item; "Pular" no CPF</td></tr>
+      <tr><td>Consistência e padrões</td><td>Mesmo componente de pagamento e mesmas mensagens em App, Totem e Balcão</td></tr>
+      <tr><td>Prevenção de erros</td><td>Itens indisponíveis desabilitados; botão de pagar bloqueado durante o envio; revalidação do estoque; motivo obrigatório para cancelar</td></tr>
+      <tr><td>Reconhecer em vez de lembrar</td><td>Unidade sempre visível no cabeçalho; resumo do pedido ao lado do pagamento</td></tr>
+      <tr><td>Flexibilidade e eficiência</td><td>Conta de demonstração; um toque adiciona no totem e no balcão; recompensa aplicada direto pela tela de fidelidade</td></tr>
+      <tr><td>Estética e design minimalista</td><td>Uma ação principal por tela; detalhes técnicos fora da interface do cliente</td></tr>
+      <tr><td>Ajudar a reconhecer e corrigir erros</td><td>Mensagens dizem o que houve e o que fazer ("Nenhum valor foi cobrado", "Tente outra forma de pagamento")</td></tr>
+      <tr><td>Ajuda e documentação</td><td>Dicas de finalidade nos campos; Política de Privacidade em linguagem simples; roteiro de avaliação na página inicial</td></tr>
+    </tbody>
+  </table>
+</figure>
+
+<h2>Evidências</h2>
+<p>As figuras a seguir foram capturadas automaticamente durante a execução dos testes. As demais capturas estão no [[s-apendice]] e na pasta <code>evidencias</code> do repositório.</p>
+
+<figure data-tipo="Figura" id="f-ev-pagamento">
+  <figcaption>Evidências dos fluxos alternativos do pagamento (CT06, CT08 e CT21)</figcaption>
+  <div class="painel painel-3">
+    <div><img src="../img/tela-10-pagamento-recusado.jpg" alt=""><span>(a) CT06 Recusado</span></div>
+    <div><img src="../img/tela-11-pagamento-expirado.jpg" alt=""><span>(b) CT08 Tempo esgotado</span></div>
+    <div><img src="../img/tela-27-pagamento-falha-comunicacao.jpg" alt=""><span>(c) CT21 Falha de comunicação</span></div>
+  </div>
+</figure>
+
+<figure data-tipo="Figura" id="f-ev-validacao">
+  <figcaption>Evidências de validação e mensagens de erro (CT09, CT16, CT18 e CT19)</figcaption>
+  <div class="painel painel-4">
+    <div><img src="../img/tela-12-cadastro-erros-validacao.jpg" alt=""><span>(a) CT09 Cadastro</span></div>
+    <div><img src="../img/tela-22-login-invalido.jpg" alt=""><span>(b) CT16 Login</span></div>
+    <div><img src="../img/ev-23-totem-cpf-invalido.jpg" alt=""><span>(c) CT18 CPF</span></div>
+    <div><img src="../img/ev-24-totem-inatividade.jpg" alt=""><span>(d) CT19 Inatividade</span></div>
+  </div>
+</figure>
+
+<figure data-tipo="Figura" id="f-ev-responsivo">
+  <figcaption>Evidência de responsividade do cardápio em 360, 768 e 1280 px (CT14)</figcaption>
+  <div class="painel painel-resp">
+    <div><img src="../img/tela-21-responsivo-360px.jpg" alt=""><span>(a) 360 px</span></div>
+    <div><img src="../img/tela-21-responsivo-768px.jpg" alt=""><span>(b) 768 px</span></div>
+    <div><img src="../img/tela-21-responsivo-1280px.jpg" alt=""><span>(c) 1280 px</span></div>
+  </div>
+</figure>

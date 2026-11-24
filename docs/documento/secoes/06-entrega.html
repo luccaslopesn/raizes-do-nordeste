@@ -1,0 +1,59 @@
+<h1>Entrega técnica</h1>
+<p>A entrega segue a Opção B do roteiro: aplicação codificada em React com dados simulados, código em repositório Git público e publicação na Vercel. Ambos os links foram verificados em navegador sem sessão iniciada (aba anônima).</p>
+
+<h2>Links públicos</h2>
+<figure data-tipo="Quadro" id="q-links">
+  <figcaption>Endereços da entrega técnica</figcaption>
+  <table>
+    <tbody>
+      <tr><th style="width:28%">Aplicação publicada</th><td><a href="https://raizes-do-nordeste-red.vercel.app">https://raizes-do-nordeste-red.vercel.app</a></td></tr>
+      <tr><th>Repositório</th><td><a href="https://github.com/luccaslopesn/raizes-do-nordeste">https://github.com/luccaslopesn/raizes-do-nordeste</a></td></tr>
+      <tr><th>Publicação</th><td>Deploy automático na Vercel a cada envio para a branch <code>main</code></td></tr>
+    </tbody>
+  </table>
+</figure>
+
+<h2>Como avaliar</h2>
+<p>A página inicial da aplicação dá acesso direto a cada canal e traz um roteiro rápido de avaliação. As credenciais de demonstração estão no [[q-acesso]]. Para ver a integração entre canais, recomenda-se fazer um pedido no App e, em outra aba do mesmo navegador, entrar na operação como Cozinha e avançar o pedido: o App e o painel de chamada se atualizam sozinhos.</p>
+
+<figure data-tipo="Quadro" id="q-acesso">
+  <figcaption>Acesso aos canais e dados de demonstração</figcaption>
+  <table>
+    <thead><tr><th style="width:24%">Canal</th><th style="width:36%">Endereço</th><th>Dados de demonstração</th></tr></thead>
+    <tbody>
+      <tr><td>App e Web do cliente</td><td>/app</td><td>E-mail demo@raizes.com.br, senha raizes123 (ou criar uma conta)</td></tr>
+      <tr><td>Totem</td><td>/totem (outra unidade: /totem?unidade=sp-paulista)</td><td>CPF de teste 529.982.247-25 (opcional)</td></tr>
+      <tr><td>Operação</td><td>/operacao</td><td>Perfil Atendente, Cozinha ou Gerente; PIN 1234</td></tr>
+      <tr><td>Painel de chamada</td><td>/painel?unidade=rec-boa-vista</td><td>Sem acesso restrito</td></tr>
+      <tr><td>Cenários de pagamento</td><td>Acrescentar ao endereço antes de pagar</td><td>?pagamento=recusar, ?pagamento=expirar ou ?pagamento=instavel</td></tr>
+    </tbody>
+  </table>
+</figure>
+
+<h2>Organização do código</h2>
+<p>O repositório separa domínio, dados, regras, estado e telas, como mostra o [[q-pastas]]. As regras de negócio (cardápio por unidade, precificação e pagamento) ficam fora dos componentes visuais, o que permite testá-las isoladamente e trocar a simulação por uma API real.</p>
+
+<figure data-tipo="Quadro" id="q-pastas">
+  <figcaption>Estrutura do repositório</figcaption>
+  <table>
+    <thead><tr><th style="width:30%">Pasta</th><th>Conteúdo</th></tr></thead>
+    <tbody>
+      <tr><td><code>src/dominio</code></td><td>Tipos do negócio: Unidade, Produto, Pedido, Cliente, Consentimentos, Campanha, Auditoria</td></tr>
+      <tr><td><code>src/mocks</code></td><td>Dados simulados: 4 unidades, 11 produtos, estoque por unidade, campanhas e recompensas</td></tr>
+      <tr><td><code>src/servicos</code></td><td>Cardápio por unidade, precificação única, serviço de pagamento simulado e orquestração do pagamento</td></tr>
+      <tr><td><code>src/estado</code></td><td>Carrinho, sessão e consentimentos, pedidos com auditoria, operação e preferências de privacidade</td></tr>
+      <tr><td><code>src/componentes</code></td><td>Peças reutilizáveis: campo de formulário, diálogo, painel de pagamento, linha do tempo, resumo de valores</td></tr>
+      <tr><td><code>src/paginas</code></td><td>Telas separadas por canal: <code>cliente</code>, <code>totem</code> e <code>operacao</code></td></tr>
+      <tr><td><code>e2e</code>, <code>evidencias</code></td><td>Testes ponta a ponta e capturas de tela geradas por eles</td></tr>
+      <tr><td><code>wireframes</code>, <code>docs</code></td><td>Wireframes de baixa fidelidade, diagramas e fontes deste documento</td></tr>
+    </tbody>
+  </table>
+</figure>
+
+<h2>Aderência ao documentado e limitações</h2>
+<p>Todos os requisitos funcionais classificados como obrigatórios no [[q-rf]] estão implementados e são demonstráveis na aplicação publicada. Por se tratar de um protótipo de front-end, três limitações são assumidas de forma explícita:</p>
+<ol class="lista-alfa">
+  <li>não há servidor: pedidos, contas e auditoria ficam no armazenamento local do navegador e são sincronizados entre abas, simulando o back-end compartilhado. Por isso, dados criados em um navegador não aparecem em outro;</li>
+  <li>o pagamento é simulado: nenhum dado de cartão é solicitado e nenhum valor é cobrado. O serviço simulado reproduz aprovação, recusa, demora e falha de comunicação, com tempos de resposta realistas;</li>
+  <li>a autenticação é de demonstração: a senha é transformada por uma função de resumo simples antes de ser guardada no navegador, apenas para não ficar em texto puro. Em produção, a autenticação ficaria no back-end, com protocolo seguro e armazenamento adequado de credenciais.</li>
+</ol>

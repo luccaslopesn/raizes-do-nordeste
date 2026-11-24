@@ -230,6 +230,102 @@ async function foto(pagina, nome) {
     if (!focado?.includes('Pular para o conteúdo')) throw new Error(`foco em "${focado}"`);
   });
 
+
+  await caso('CT16', 'Login com senha errada mostra mensagem genérica', async () => {
+    const p = await contexto.newPage();
+    await p.goto(`${BASE}/app/entrar`);
+    await p.getByLabel('E-mail').fill('demo@raizes.com.br');
+    await p.getByLabel('Senha').fill('errada123');
+    await p.getByRole('button', { name: 'Entrar', exact: true }).click();
+    await p.getByText('E-mail ou senha incorretos.').waitFor();
+    await foto(p, '22-login-invalido');
+    await p.close();
+  });
+
+  await caso('CT17', 'PIN incorreto bloqueia a operação', async () => {
+    const p = await contexto.newPage();
+    await p.goto(`${BASE}/operacao`);
+    await p.getByLabel('PIN').fill('0000');
+    await p.getByRole('button', { name: 'Entrar' }).click();
+    await p.getByText('PIN incorreto.').waitFor();
+    await p.close();
+  });
+
+  await caso('CT18', 'Totem: CPF inválido é rejeitado', async () => {
+    const p = await contexto.newPage();
+    await p.setViewportSize({ width: 540, height: 960 });
+    await p.goto(`${BASE}/totem`);
+    await p.getByRole('button', { name: /Toque para fazer seu pedido/ }).click();
+    await p.getByRole('button', { name: /Bolo de macaxeira/ }).first().click().catch(async () => {
+      await p.getByRole('button', { name: 'Bolos e doces' }).click();
+      await p.getByRole('button', { name: /Bolo de macaxeira/ }).click();
+    });
+    await p.getByRole('button', { name: 'Revisar pedido' }).click();
+    await p.getByRole('button', { name: 'Continuar' }).click();
+    for (const d of '12345678900') await p.getByRole('button', { name: d, exact: true }).click();
+    await p.getByRole('button', { name: 'Confirmar CPF' }).click();
+    await p.getByText('CPF inválido. Confira os números.').waitFor();
+    await foto(p, '23-totem-cpf-invalido');
+    await p.close();
+  });
+
+  await caso('CT19', 'Totem: inatividade avisa e apaga a sessão', async () => {
+    const p = await contexto.newPage();
+    await p.setViewportSize({ width: 540, height: 960 });
+    await p.clock.install();
+    await p.goto(`${BASE}/totem`);
+    await p.getByRole('button', { name: /Toque para fazer seu pedido/ }).click();
+    await p.getByRole('button', { name: 'Bebidas' }).click();
+    await p.getByRole('button', { name: /Suco de cajá/ }).click();
+    await p.clock.runFor(61_000);
+    await p.getByRole('alertdialog', { name: 'Ainda está aí?' }).waitFor();
+    await foto(p, '24-totem-inatividade');
+    await p.clock.runFor(16_000);
+    await p.getByRole('button', { name: /Toque para fazer seu pedido/ }).waitFor();
+    await p.getByRole('button', { name: /Toque para fazer seu pedido/ }).click();
+    await p.getByRole('button', { name: 'Revisar pedido' }).waitFor();
+    if (!(await p.getByRole('button', { name: 'Revisar pedido' }).isDisabled())) throw new Error('carrinho não foi limpo');
+    await p.close();
+  });
+
+  await caso('CT20', 'Cancelamento no balcão exige motivo e entra na auditoria', async () => {
+    const p = await contexto.newPage();
+    await p.setViewportSize({ width: 1280, height: 900 });
+    await p.goto(`${BASE}/operacao`);
+    await p.getByRole('radio', { name: /^Gerente/ }).check();
+    await p.getByLabel('PIN').fill('1234');
+    await p.getByRole('button', { name: 'Entrar' }).click();
+    await p.waitForURL('**/balcao');
+    await p.getByRole('button', { name: /Tapioca de coco/ }).click();
+    await p.getByRole('button', { name: 'Cobrar na maquininha' }).click();
+    await p.getByText(/enviado para a cozinha/).waitFor({ timeout: 10000 });
+    const codigo = (await p.getByText(/enviado para a cozinha/).textContent()).match(/Pedido (\w+)/)[1];
+    await p.getByRole('row', { name: new RegExp(codigo) }).getByRole('button', { name: 'Cancelar' }).click();
+    await p.getByLabel('Motivo').selectOption('Pedido duplicado');
+    await foto(p, '25-balcao-cancelamento');
+    await p.getByRole('button', { name: 'Confirmar cancelamento' }).click();
+    await p.getByRole('link', { name: 'Gestão' }).click();
+    await p.getByRole('row', { name: new RegExp(`${codigo}.*Pedido duplicado`) }).waitFor();
+    await foto(p, '26-auditoria-cancelamento');
+    await p.close();
+  });
+
+  await caso('CT21', 'Serviço instável: nova tentativa com a mesma chave é aprovada', async () => {
+    const p = await contexto.newPage();
+    await p.goto(`${BASE}/app/entrar`);
+    await p.getByRole('button', { name: 'Entrar com conta de demonstração' }).click();
+    await p.waitForURL(`${BASE}/app`);
+    await p.goto(`${BASE}/app/unidade/for-aldeota`);
+    await p.getByRole('button', { name: 'Adicionar Suco de cajá ao carrinho' }).click();
+    await p.goto(`${BASE}/app/pagamento?pagamento=instavel`);
+    await p.getByRole('button', { name: 'Pagar e enviar pedido' }).click();
+    await p.getByText('Falha de comunicação.').waitFor({ timeout: 10000 });
+    await foto(p, '27-pagamento-falha-comunicacao');
+    await p.getByRole('button', { name: 'Tentar novamente' }).click();
+    await p.waitForURL('**/app/pedido/**', { timeout: 15000 });
+    await p.close();
+  });
+
   await navegador.close();
   fs.writeFileSync(path.join(SAIDA, 'resultado.json'), JSON.stringify({ resultados, errosConsole }, null, 2));
   const falhas = resultados.filter((r) => !r.ok).length;

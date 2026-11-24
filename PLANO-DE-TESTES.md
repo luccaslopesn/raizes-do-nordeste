@@ -1,7 +1,7 @@
 # Plano de testes
 
 Automação: `e2e/fluxos.cjs` (Playwright, ponta a ponta, gera as capturas em `evidencias/`) e `src/**/*.test.ts` (Vitest, regras de negócio).
-Última execução: 17/17 cenários E2E e 15/15 testes de unidade aprovados, sem erros de console.
+Última execução (24/11/2026): 23/23 execuções E2E (21 cenários; CT14 em 3 larguras) e 15/15 testes de unidade aprovados, sem erros de console. Lighthouse (celular): performance 95, acessibilidade 100, boas práticas 100.
 
 | ID | Cenário | Tipo | Pré-condição | Passos | Resultado esperado | Evidência |
 |---|---|---|---|---|---|---|
@@ -21,8 +21,11 @@ Automação: `e2e/fluxos.cjs` (Playwright, ponta a ponta, gera as capturas em `e
 | CT14 | Responsividade | Positivo | — | Cardápio em 360, 768 e 1280 px | Sem rolagem horizontal em nenhuma largura | 21 |
 | CT15 | Navegação por teclado | Positivo · Acessibilidade | — | Pressionar Tab ao abrir | Primeiro foco é "Pular para o conteúdo" | — |
 
-Casos manuais complementares (não automatizados):
-- Totem: ficar 60 s sem tocar → aviso "Ainda está aí?" com contagem de 15 s → sessão apagada.
-- Totem: CPF válido sem conta → pedido segue sem pontos; CPF inválido → "CPF inválido".
-- Balcão: cancelar pedido → registro na auditoria com perfil e motivo; pontos estornados.
-- `?pagamento=instavel`: primeira tentativa falha por comunicação, a segunda (mesma chave) é aprovada.
+| CT16 | Login inválido | Negativo · Segurança | Conta demo | Senha "errada123" | "E-mail ou senha incorretos." sem indicar qual campo | 22 |
+| CT17 | PIN incorreto | Negativo · Segurança | — | PIN "0000" na operação | "PIN incorreto." | — |
+| CT18 | CPF inválido no totem | Negativo · Validação | Totem com item | CPF 123.456.789-00 | "CPF inválido. Confira os números." | 23 |
+| CT19 | Inatividade no totem | Negativo · Privacidade | Item no carrinho | 60 s sem toque + 15 s | Aviso "Ainda está aí?"; sessão e carrinho apagados | 24 |
+| CT20 | Cancelamento auditado | Positivo · Auditoria | Gerente no balcão | Cobrar, cancelar com motivo "Pedido duplicado" | Registro na auditoria com perfil, código e motivo | 25–26 |
+| CT21 | Serviço instável | Negativo · Integração | `?pagamento=instavel` | Pagar; "Tentar novamente" | Primeira: "Falha de comunicação."; segunda (mesma chave) aprovada | 27 |
+
+Verificação manual: "Baixar meus dados" e "Excluir minha conta" na Central de Privacidade.

@@ -61,7 +61,8 @@
 .abas-categorias button[aria-pressed='true'] { background: var(--carvao); color: var(--palha); }
 
 .cartao-produto { display: grid; grid-template-columns: 88px 1fr; gap: var(--e3); align-items: start; }
-.cartao-produto.indisponivel { opacity: 0.7; }
+.cartao-produto.indisponivel { background: #f6f0e6; box-shadow: 2px 2px 0 var(--cinza); }
+.cartao-produto.indisponivel .ilustracao-produto { opacity: 0.45; }
 .cartao-produto h3 { margin: 0 0 var(--e1); font-size: 1.05rem; }
 .cartao-produto p { margin: 0 0 var(--e2); font-size: 0.9rem; color: var(--cinza); }
 .ilustracao-produto { width: 88px; height: 88px; border: var(--contorno); border-radius: var(--raio-pequeno); display: grid; place-items: center; font-family: var(--fonte-titulo); font-weight: 700; font-size: 1.6rem; color: var(--carvao); }

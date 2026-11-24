@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { usePrivacidade } from '../estado/privacidade';
 
@@ -7,7 +8,15 @@ import { usePrivacidade } from '../estado/privacidade';
  */
 export function BannerCookies() {
   const { cookies, definirCookies } = usePrivacidade();
-  if (cookies.decididoEm) return null;
+  // Só aparece com as fontes carregadas: evita que o banner mude de altura na tela (CLS)
+  const [fontesProntas, setFontesProntas] = useState(false);
+  useEffect(() => {
+    const liberar = () => setFontesProntas(true);
+    const limite = window.setTimeout(liberar, 1200);
+    document.fonts?.ready.then(liberar).catch(liberar);
+    return () => window.clearTimeout(limite);
+  }, []);
+  if (cookies.decididoEm || !fontesProntas) return null;
 
   return (
     <section className="banner-cookies" role="region" aria-labelledby="titulo-cookies">

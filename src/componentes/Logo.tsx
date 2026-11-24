@@ -19,7 +19,7 @@ export function Logo({ tamanho = 40, compacto = false }: { tamanho?: number; com
       <SimboloSol tamanho={tamanho} />
       {!compacto && (
         <span className="logo-texto">
-          <span className="logo-nome">Raízes</span>
+          <span className="logo-nome">Raízes</span>{' '}
           <span className="logo-sub">do Nordeste</span>
         </span>
       )}

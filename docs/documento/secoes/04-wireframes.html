@@ -1,0 +1,111 @@
+<h1 id="s-wireframes">Wireframes e interface</h1>
+<p>Os wireframes foram feitos em baixa fidelidade (tons de cinza, caixas e linhas no lugar de texto e imagem) para validar a arquitetura de informação antes de qualquer decisão visual. Eles cobrem os três canais e as telas de cada fluxo principal. Os números em círculo escuro marcam pontos explicados no texto. A interface implementada seguiu esses wireframes, e a comparação está na [[s-implementada]].</p>
+
+<h2>Mapa de navegação</h2>
+<p>A [[f-navegacao]] mostra como as telas se conectam em cada canal. No App e na Web, o caminho principal tem cinco passos: unidade, cardápio, carrinho, pagamento e acompanhamento. O login aparece só quando é necessário, no momento de pagar, para não criar barreira na navegação pelo cardápio. No Totem, o fluxo é linear e sempre volta à tela de descanso. Na Operação, o perfil escolhido no login define as áreas disponíveis.</p>
+
+<figure data-tipo="Figura" id="f-navegacao" data-largura="100%">
+  <figcaption>Mapa de navegação por canal</figcaption>
+  <img src="../diagramas/navegacao-app.svg" alt="Navegação do App e Web" style="width:100%">
+  <img src="../diagramas/navegacao-totem.svg" alt="Navegação do Totem" style="width:100%;margin-top:6pt">
+  <img src="../diagramas/navegacao-op.svg" alt="Navegação da Operação" style="width:62%;margin-top:6pt">
+</figure>
+
+<h2>Wireframes mobile (App e Web)</h2>
+<p>A [[f-wf-mobile-1]] cobre o início da jornada. Em M1, cada unidade mostra um selo com o formato da loja (1), para que o cliente saiba de antemão que uma unidade reduzida terá menos pratos. O aviso de cookies (2) aparece na base da tela, sem bloquear a navegação, e "Só essenciais" tem o mesmo peso visual de "Aceitar análise". Em M2, o item esgotado (3) continua visível, mas desabilitado e com o motivo, e o selo "São João" (4) identifica o produto sazonal. A barra fixa "Ver carrinho" mostra quantidade e total sem sair do cardápio. Em M3, recompensas sem saldo suficiente aparecem desabilitadas (5), com a explicação, e o resumo mostra campanha aplicada e pontos a ganhar antes do pagamento.</p>
+
+<figure data-tipo="Figura" id="f-wf-mobile-1">
+  <figcaption>Wireframes mobile: escolha de unidade, cardápio e carrinho</figcaption>
+  <div class="painel painel-3">
+    <div><img src="../img/wf-m1.png" alt="M1"><span>(a) M1 Escolher unidade</span></div>
+    <div><img src="../img/wf-m2.png" alt="M2"><span>(b) M2 Cardápio da unidade</span></div>
+    <div><img src="../img/wf-m3.png" alt="M3"><span>(c) M3 Carrinho</span></div>
+  </div>
+</figure>
+
+<p>A [[f-wf-mobile-2]] trata do pagamento e do acompanhamento. Em M4, depois do toque o botão fica bloqueado e a tela passa ao estado de espera (6), com QR Code do Pix e o selo indicando que o processamento é externo. Em M5, cada resposta do serviço tem um aviso próprio no topo, e o botão vira "Tentar novamente" sem perder a seleção. Em M6, o código de retirada (7) é o elemento de maior destaque, e a linha do tempo mostra o horário de cada etapa.</p>
+
+<figure data-tipo="Figura" id="f-wf-mobile-2">
+  <figcaption>Wireframes mobile: pagamento, respostas do serviço externo e acompanhamento</figcaption>
+  <div class="painel painel-3">
+    <div><img src="../img/wf-m4.png" alt="M4"><span>(a) M4 Pagamento e espera</span></div>
+    <div><img src="../img/wf-m5.png" alt="M5"><span>(b) M5 Respostas alternativas</span></div>
+    <div><img src="../img/wf-m6.png" alt="M6"><span>(c) M6 Acompanhar pedido</span></div>
+  </div>
+</figure>
+
+<p>A [[f-wf-mobile-3]] reúne as telas de dados pessoais. Em M7, os consentimentos opcionais começam desmarcados, e a data de nascimento (8) só aparece quando o cliente adere à fidelidade, com a finalidade escrita ao lado. M8 concentra os direitos do titular. Em M9, a ausência do consentimento de marketing (9) é explicada, em vez de as ofertas personalizadas simplesmente sumirem sem motivo aparente.</p>
+
+<figure data-tipo="Figura" id="f-wf-mobile-3">
+  <figcaption>Wireframes mobile: cadastro, Central de Privacidade e fidelidade</figcaption>
+  <div class="painel painel-3">
+    <div><img src="../img/wf-m7.png" alt="M7"><span>(a) M7 Cadastro</span></div>
+    <div><img src="../img/wf-m8.png" alt="M8"><span>(b) M8 Central de Privacidade</span></div>
+    <div><img src="../img/wf-m9.png" alt="M9"><span>(c) M9 Fidelidade e promoções</span></div>
+  </div>
+</figure>
+
+<h2>Wireframes desktop</h2>
+<p>No computador ([[f-wf-desktop-1]]), a estrutura é a mesma do celular para que o cliente não precise reaprender: a navegação inferior vira menu no topo, a unidade escolhida fica visível no cabeçalho e o cardápio passa a duas colunas. No checkout, a ação fica à esquerda e o resumo fica fixo à direita.</p>
+
+<figure data-tipo="Figura" id="f-wf-desktop-1">
+  <figcaption>Wireframes desktop do cliente: cardápio e pagamento</figcaption>
+  <div class="painel painel-1">
+    <div><img src="../img/wf-d1.png" alt="D1"><span>(a) D1 Cardápio (1280 px)</span></div>
+    <div><img src="../img/wf-d2.png" alt="D2"><span>(b) D2 Carrinho e pagamento em duas colunas</span></div>
+  </div>
+</figure>
+
+<p>As telas da operação ([[f-wf-desktop-2]]) são pensadas para uso contínuo. A cozinha vê colunas por status, com o pedido mais antigo no topo, e o pedido com mais de 15 minutos ganha destaque (10). O gerente vê indicadores agregados e a trilha de auditoria, sem dados pessoais de clientes.</p>
+
+<figure data-tipo="Figura" id="f-wf-desktop-2">
+  <figcaption>Wireframes desktop da operação: cozinha e gestão</figcaption>
+  <div class="painel painel-1">
+    <div><img src="../img/wf-d3.png" alt="D3"><span>(a) D3 Cozinha (perfil Cozinha)</span></div>
+    <div><img src="../img/wf-d4.png" alt="D4"><span>(b) D4 Gestão (perfil Gerente)</span></div>
+  </div>
+</figure>
+
+<h2>Wireframes do totem</h2>
+<p>O totem ([[f-wf-totem]]) foi desenhado para tela vertical de toque, usada em pé e com pressa. A tela de descanso é um único botão. No cardápio, um toque adiciona o item e um contador aparece no canto do cartão. O CPF é digitado em teclado próprio na tela, aparece oculto e é opcional, e o botão "Pular" tem o mesmo destaque de "Confirmar". A senha de retirada ocupa a tela inteira, e a sessão se encerra sozinha em 20 segundos. Em qualquer tela, 60 segundos sem toque abrem o aviso "Ainda está aí?" e, sem resposta, a sessão é apagada.</p>
+
+<figure data-tipo="Figura" id="f-wf-totem">
+  <figcaption>Wireframes do totem de autoatendimento</figcaption>
+  <div class="painel painel-4">
+    <div><img src="../img/wf-t1.png" alt="T1"><span>(a) T1 Descanso</span></div>
+    <div><img src="../img/wf-t2.png" alt="T2"><span>(b) T2 Cardápio</span></div>
+    <div><img src="../img/wf-t3.png" alt="T3"><span>(c) T3 CPF opcional</span></div>
+    <div><img src="../img/wf-t4.png" alt="T4"><span>(d) T4 Senha</span></div>
+  </div>
+</figure>
+
+<h2 id="s-implementada">Interface implementada</h2>
+<p>A [[f-implementada-1]] mostra as telas equivalentes da aplicação publicada. A hierarquia dos wireframes foi mantida, e a camada visual acrescentou a identidade da marca e estados de interação (foco, carregamento e erro) que um wireframe não representa. As capturas foram geradas automaticamente pelos testes ponta a ponta (ver [[s-testes]]).</p>
+
+<figure data-tipo="Figura" id="f-implementada-1">
+  <figcaption>Interface implementada no celular: cardápio, carrinho, espera do pagamento e acompanhamento</figcaption>
+  <div class="painel painel-4">
+    <div><img src="../img/tela-03-cardapio-unidade-completa.jpg" alt=""><span>(a) Cardápio</span></div>
+    <div><img src="../img/tela-04-carrinho-com-recompensa.jpg" alt=""><span>(b) Carrinho</span></div>
+    <div><img src="../img/tela-06-pagamento-aguardando-servico-externo.jpg" alt=""><span>(c) Aguardando serviço externo</span></div>
+    <div><img src="../img/tela-09-acompanhar-pedido-pronto.jpg" alt=""><span>(d) Pedido pronto</span></div>
+  </div>
+</figure>
+
+<figure data-tipo="Figura" id="f-implementada-2">
+  <figcaption>Interface implementada no totem: descanso, cardápio, CPF mascarado e senha de retirada</figcaption>
+  <div class="painel painel-4">
+    <div><img src="../img/ev-15-totem-descanso.jpg" alt=""><span>(a) Descanso</span></div>
+    <div><img src="../img/ev-16-totem-cardapio.jpg" alt=""><span>(b) Cardápio</span></div>
+    <div><img src="../img/ev-17-totem-cpf-mascarado.jpg" alt=""><span>(c) CPF oculto</span></div>
+    <div><img src="../img/ev-18-totem-confirmacao.jpg" alt=""><span>(d) Senha</span></div>
+  </div>
+</figure>
+
+<figure data-tipo="Figura" id="f-implementada-3">
+  <figcaption>Interface implementada na operação: cozinha e painel do gerente</figcaption>
+  <div class="painel painel-1">
+    <div><img src="../img/tela-08-cozinha-kds.jpg" alt=""><span>(a) Cozinha com o pedido do app em preparo</span></div>
+    <div><img src="../img/tela-19-gestao-gerente.jpg" alt=""><span>(b) Gestão: indicadores dos últimos 7 dias</span></div>
+  </div>
+</figure>
