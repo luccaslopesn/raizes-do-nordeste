@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Resultado bruto da execução E2E (as capturas ficam versionadas)
+evidencias/resultado.json

@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Wireframes · Raízes do Nordeste</title>
+<style>
+  /* Baixa fidelidade: só cinza, caixas e linhas. Sem cor, sem fonte da marca. */
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 24px; background: #e9e9e9; font: 13px/1.35 'Comic Neue', 'Segoe Print', 'Chalkboard SE', system-ui, sans-serif; color: #333; display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-start; }
+  .bloco { width: min-content; display: flex; flex-direction: column; gap: 8px; }
+  .titulo { font: 600 15px system-ui, sans-serif; color: #222; }
+  .nota { font: 12px/1.4 system-ui, sans-serif; color: #555; max-width: 100%; }
+  .frame { background: #fff; border: 2px solid #555; border-radius: 6px; overflow: hidden; position: relative; display: flex; flex-direction: column; }
+  .mobile { width: 360px; height: 740px; border-radius: 22px; }
+  .desktop { width: 1280px; height: 800px; }
+  .totem { width: 540px; height: 960px; }
+  .topo { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 2px solid #999; min-height: 52px; }
+  .conteudo { flex: 1; padding: 14px; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
+  .rodape-nav { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 2px solid #999; }
+  .rodape-nav span { text-align: center; padding: 8px 0; font-size: 11px; }
+  .rodape-nav span::before { content: ''; display: block; width: 18px; height: 18px; margin: 0 auto 2px; border: 2px solid #888; border-radius: 4px; }
+  .img { background: #ddd; border: 2px solid #999; position: relative; flex: none; }
+  .img::before, .img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top right, transparent calc(50% - 1px), #aaa 50%, transparent calc(50% + 1px)); }
+  .img::after { background: linear-gradient(to top left, transparent calc(50% - 1px), #aaa 50%, transparent calc(50% + 1px)); }
+  .logo { width: 34px; height: 34px; border-radius: 50%; }
+  .linha { height: 10px; background: #ccc; border-radius: 3px; }
+  .linha.t { height: 18px; background: #999; }
+  .linha.m { height: 13px; background: #b5b5b5; }
+  .caixa { position: relative; border: 2px solid #999; border-radius: 6px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+  .caixa.tracejada { border-style: dashed; }
+  .caixa.cinza { background: #f2f2f2; }
+  .btn { border: 2px solid #555; border-radius: 6px; padding: 9px 12px; text-align: center; font-weight: 700; background: #bbb; }
+  .btn.claro { background: #fff; color: #333; }
+  .btn.peq { padding: 5px 10px; font-size: 12px; }
+  .campo { display: flex; flex-direction: column; gap: 3px; }
+  .campo b { font-size: 12px; }
+  .entrada { height: 34px; border: 2px solid #999; border-radius: 5px; }
+  .chk { display: grid; grid-template-columns: 18px 1fr; gap: 8px; align-items: start; border: 1.5px solid #bbb; border-radius: 5px; padding: 7px; }
+  .chk i { width: 16px; height: 16px; border: 2px solid #666; border-radius: 3px; }
+  .chk i.x { background: repeating-linear-gradient(45deg, #666 0 2px, #fff 2px 5px); }
+  .chips { display: flex; gap: 6px; overflow: hidden; }
+  .chip { border: 2px solid #888; border-radius: 99px; padding: 4px 12px; white-space: nowrap; font-size: 12px; }
+  .chip.on { background: #666; color: #fff; }
+  .flex { display: flex; gap: 10px; align-items: center; }
+  .entre { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .col { display: flex; flex-direction: column; gap: 8px; }
+  .grow { flex: 1; }
+  .marcador { position: absolute; width: 22px; height: 22px; border-radius: 50%; background: #333; color: #fff; font: 700 12px/22px system-ui; text-align: center; z-index: 2; }
+  .anot { font: italic 11px system-ui; color: #666; }
+  .grade2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .grade3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .grade4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .bolinha { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #666; flex: none; }
+  .bolinha.on { background: #666; }
+  .tecla { border: 2px solid #777; border-radius: 6px; height: 64px; display: grid; place-items: center; font-size: 22px; font-weight: 700; }
+  .sobre { z-index: 3; position: absolute; inset: auto 0 52px 0; border-top: 3px solid #555; background: #fafafa; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+  table { border-collapse: collapse; width: 100%; font-size: 12px; }
+  td, th { border: 1.5px solid #bbb; padding: 5px; text-align: left; }
+</style>
+</head>
+<body>
+
+<!-- ======================= MOBILE ======================= -->
+<div class="bloco" id="m1">
+  <div class="titulo">M1 · Escolher unidade + banner de cookies (App/Web, 360px)</div>
+  <div class="frame mobile">
+    <div class="topo"><div class="img logo"></div><div class="linha m" style="width:90px"></div><div class="grow"></div><div class="btn peq">🛒</div></div>
+    <div class="conteudo">
+      <div class="caixa cinza"><div class="linha t" style="width:80%"></div><div class="linha" style="width:95%"></div><div class="linha" style="width:70%"></div></div>
+      <div class="campo"><b>Buscar unidade ou cidade</b><div class="entrada"></div></div>
+      <span class="marcador" style="left:300px;top:205px">1</span>
+      <div class="caixa"><div class="entre"><div class="linha m" style="width:55%"></div><span class="chip">Cozinha completa</span></div><div class="linha" style="width:40%"></div><div class="linha" style="width:50%"></div></div>
+      <div class="caixa"><div class="entre"><div class="linha m" style="width:55%"></div><span class="chip">Reduzida</span></div><div class="linha" style="width:40%"></div><div class="linha" style="width:50%"></div></div>
+      <div class="caixa"><div class="entre"><div class="linha m" style="width:55%"></div><span class="chip">Completa</span></div><div class="linha" style="width:40%"></div></div>
+    </div>
+    <div class="sobre"><b>Sua privacidade</b><div class="linha"></div><div class="linha" style="width:80%"></div><div class="grade2"><div class="btn claro">Só essenciais</div><div class="btn claro">Aceitar análise</div></div><span class="marcador" style="right:10px;top:-11px">2</span></div>
+    <div class="rodape-nav"><span>Cardápio</span><span>Promoções</span><span>Pedidos</span><span>Conta</span></div>
+  </div>
+  <div class="nota">1. Selo indica formato da unidade (completa/reduzida). 2. LGPD: recusar tem o mesmo peso visual de aceitar; nada além do essencial roda antes da escolha.</div>
+</div>
+
+<div class="bloco" id="m2">
+  <div class="titulo">M2 · Cardápio da unidade</div>
+  <div class="frame mobile">
+    <div class="topo"><div class="img logo"></div><div class="linha m" style="width:90px"></div><div class="grow"></div><div class="btn peq">🛒 2</div></div>
+    <div class="conteudo">
+      <div class="linha" style="width:30%"></div><div class="linha t" style="width:70%"></div>
+      <div class="caixa tracejada cinza"><div class="linha" style="width:85%"></div></div>
+      <div class="chips"><span class="chip on">Tudo</span><span class="chip">Tapiocas</span><span class="chip">Cuscuz</span><span class="chip">Bolos</span></div>
+      <div class="caixa"><div class="flex" style="align-items:start"><div class="img" style="width:72px;height:72px"></div><div class="col grow"><div class="linha m"></div><div class="linha"></div><div class="entre"><div class="linha m" style="width:50px"></div><div class="btn peq">Adicionar</div></div></div></div></div>
+      <div class="caixa"><div class="flex" style="align-items:start"><div class="img" style="width:72px;height:72px"></div><div class="col grow"><span class="chip" style="align-self:start">Esgotado</span><div class="linha m"></div><div class="entre"><div class="linha m" style="width:50px"></div><div class="btn peq claro">Indisponível</div></div></div></div><span class="marcador" style="right:-6px;top:-8px">3</span></div>
+      <div class="caixa"><div class="flex" style="align-items:start"><div class="img" style="width:72px;height:72px"></div><div class="col grow"><span class="chip" style="align-self:start">São João</span><div class="linha m"></div><div class="entre"><div class="linha m" style="width:50px"></div><div class="btn peq">Adicionar</div></div></div></div><span class="marcador" style="right:-6px;top:-8px">4</span></div>
+    </div>
+    <div class="btn" style="margin:0 14px 8px">Ver carrinho · 2 itens · R$ 00,00</div>
+    <div class="rodape-nav"><span>Cardápio</span><span>Promoções</span><span>Pedidos</span><span>Conta</span></div>
+  </div>
+  <div class="nota">Faixa de campanha ativa no topo. 3. Item esgotado no estoque local fica visível e desabilitado. 4. Item sazonal só aparece dentro da janela de datas. Pratos que a unidade reduzida não faz não aparecem.</div>
+</div>
+
+<div class="bloco" id="m3">
+  <div class="titulo">M3 · Carrinho</div>
+  <div class="frame mobile">
+    <div class="topo"><div class="img logo"></div><div class="linha m" style="width:90px"></div><div class="grow"></div><div class="btn peq">🛒</div></div>
+    <div class="conteudo">
+      <div class="linha t" style="width:40%"></div><div class="linha" style="width:60%"></div>
+      <div class="caixa">
+        <div class="entre"><div class="linha m" style="width:55%"></div><div class="linha m" style="width:50px"></div></div>
+        <div class="entre"><div class="flex"><div class="btn peq claro">−</div>2<div class="btn peq claro">+</div></div><u>Remover</u></div>
+        <hr style="width:100%;border:0;border-top:1.5px solid #ccc">
+        <div class="entre"><div class="linha m" style="width:45%"></div><div class="linha m" style="width:50px"></div></div>
+      </div>
+      <div class="caixa"><div class="entre"><b>Usar pontos</b><span class="chip">180 pontos</span></div>
+        <div class="flex"><span class="bolinha"></span>Não usar agora</div>
+        <div class="flex"><span class="bolinha on"></span>Café grátis · 50 pts</div>
+        <div class="flex" style="opacity:.5"><span class="bolinha"></span>Tapioca grátis · 150 pts</div><span class="marcador" style="right:-6px;top:-8px">5</span></div>
+      <div class="caixa cinza"><div class="entre">Subtotal<div class="linha" style="width:50px"></div></div><div class="entre">Desconto<div class="linha" style="width:50px"></div></div><div class="entre"><b>Total</b><div class="linha m" style="width:60px"></div></div><div class="entre">Você ganha<div class="linha" style="width:60px"></div></div>
+        <div class="btn">Ir para pagamento</div></div>
+    </div>
+    <div class="rodape-nav"><span>Cardápio</span><span>Promoções</span><span>Pedidos</span><span>Conta</span></div>
+  </div>
+  <div class="nota">5. Recompensas sem saldo suficiente ficam desabilitadas com o motivo. Sem login, o botão vira "Entrar" / "Criar conta". Resumo mostra campanha aplicada e pontos que serão ganhos.</div>
+</div>
+
+<div class="bloco" id="m4">
+  <div class="titulo">M4 · Pagamento: escolha e espera do serviço externo</div>
+  <div class="frame mobile">
+    <div class="topo"><div class="img logo"></div><div class="linha m" style="width:90px"></div></div>
+    <div class="conteudo">
+      <div class="linha t" style="width:45%"></div>
+      <b>Forma de pagamento</b>
+      <div class="caixa" style="flex-direction:row;align-items:center"><span class="bolinha on"></span>Pix</div>
+      <div class="caixa" style="flex-direction:row;align-items:center"><span class="bolinha"></span>Cartão de crédito</div>
+      <div class="caixa" style="flex-direction:row;align-items:center"><span class="bolinha"></span>Cartão de débito</div>
+      <div class="btn">Pagar e enviar pedido</div>
+      <div class="anot">↓ após o toque (botão bloqueado, sem clique duplo)</div>
+      <div class="caixa tracejada" style="align-items:center"><div class="img" style="width:110px;height:110px"></div><div class="linha m" style="width:70%"></div><div class="linha" style="width:85%"></div><span class="chip">Processado por serviço externo</span><span class="marcador" style="right:-6px;top:-8px">6</span></div>
+    </div>
+  </div>
+  <div class="nota">6. Estado "aguardando resposta": QR Pix (ou spinner no cartão) e selo deixando claro que quem processa é um serviço externo. Dados de cartão não passam pelo sistema da rede.</div>
+</div>
+
+<div class="bloco" id="m5">
+  <div class="titulo">M5 · Pagamento: respostas alternativas</div>
+  <div class="frame mobile">
+    <div class="topo"><div class="img logo"></div><div class="linha m" style="width:90px"></div></div>
+    <div class="conteudo">
+      <div class="linha t" style="width:45%"></div>
+      <div class="caixa" style="border-left:8px solid #555"><b>Pagamento recusado</b><div class="linha"></div><div class="linha" style="width:60%"></div></div>
+      <div class="caixa tracejada" style="border-left:8px solid #999"><b>Tempo esgotado</b><div class="anot">"Nenhum valor foi cobrado"</div></div>
+      <div class="caixa tracejada" style="border-left:8px solid #999"><b>Falha de comunicação</b><div class="anot">"Tente de novo sem risco de cobrança duplicada"</div></div>
+      <b>Forma de pagamento</b>
+      <div class="caixa" style="flex-direction:row;align-items:center"><span class="bolinha"></span>Pix</div>
+      <div class="caixa" style="flex-direction:row;align-items:center"><span class="bolinha on"></span>Cartão de débito</div>
+      <div class="btn">Tentar novamente</div>
+    </div>
+  </div>
+  <div class="nota">As três variações do aviso substituem a faixa no topo conforme a resposta. Recusa e expiração geram nova tentativa com nova chave; falha de comunicação reenvia com a mesma chave (idempotência).</div>
+</div>
+
+<div class="bloco" id="m6">
+  <div class="titulo">M6 · Acompanhar pedido</div>
+  <div class="frame mobile">
+    <div class="topo"><div class="img logo"></div><div class="linha m" style="width:90px"></div></div>
+    <div class="conteudo">
+      <div class="linha" style="width:50%"></div><div class="linha t" style="width:60%"></div>
+      <div class="caixa" style="align-items:start"><div class="linha" style="width:40%"></div><div style="font:800 44px system-ui;letter-spacing:4px">A123</div><div class="linha" style="width:85%"></div><span class="marcador" style="right:-6px;top:-8px">7</span></div>
+      <div class="caixa">
+        <div class="flex"><span class="bolinha on"></span><b class="grow">Pedido recebido</b>08:12</div>
+        <div class="flex"><span class="bolinha on"></span><b class="grow">Em preparo</b>08:14</div>
+        <div class="flex"><span class="bolinha"></span><span class="grow">Pronto para retirada</span></div>
+        <div class="flex"><span class="bolinha"></span><span class="grow">Retirado</span></div>
+      </div>
+      <div class="caixa cinza"><div class="linha m" style="width:30%"></div><div class="linha"></div><div class="linha" style="width:70%"></div><div class="caixa tracejada">+41 pontos</div></div>
+    </div>
+    <div class="rodape-nav"><span>Cardápio</span><span>Promoções</span><span>Pedidos</span><span>Conta</span></div>
+  </div>
+  <div class="nota">7. Código de retirada em destaque. A linha do tempo atualiza sozinha quando a cozinha muda o status.</div>
+</div>
+
+<div class="bloco" id="m7">
+  <div class="titulo">M7 · Cadastro com consentimentos</div>
+  <div class="frame mobile">
+    <div class="topo"><div class="img logo"></div><div class="linha m" style="width:90px"></div></div>
+    <div class="conteudo">
+      <div class="linha t" style="width:45%"></div>
+      <div class="campo"><b>Nome *</b><span class="anot">Usado para chamar você no balcão</span><div class="entrada"></div></div>
+      <div class="campo"><b>E-mail *</b><div class="entrada" style="border-color:#333;border-width:3px"></div><span class="anot" style="font-style:normal;font-weight:700">⚠ Informe um e-mail válido</span></div>
+      <div class="campo"><b>Senha *</b><div class="entrada"></div></div>
+      <b>Privacidade e consentimentos</b>
+      <div class="chk"><i></i><div><b>Aceito Termos e Política (obrigatório)</b></div></div>
+      <div class="chk"><i class="x"></i><div><b>Programa de fidelidade (opcional)</b><div class="anot">para que usamos</div></div></div>
+      <div class="campo" style="margin-left:26px"><b>Data de nascimento</b><span class="anot">Finalidade: benefício de aniversário</span><div class="entrada"></div><span class="marcador" style="right:-6px;top:-8px">8</span></div>
+      <div class="chk"><i></i><div><b>Ofertas personalizadas (opcional)</b></div></div>
+      <div class="btn">Criar conta</div>
+    </div>
+  </div>
+  <div class="nota">Opcionais começam desmarcados. 8. A data de nascimento só aparece se a pessoa aderir à fidelidade (minimização) e traz a finalidade ao lado. Erros aparecem abaixo do campo, ligados a ele para leitores de tela.</div>
+</div>
+
+<div class="bloco" id="m8">
+  <div class="titulo">M8 · Central de Privacidade</div>
+  <div class="frame mobile">
+    <div class="topo"><div class="img logo"></div><div class="linha m" style="width:90px"></div></div>
+    <div class="conteudo">
+      <div class="linha t" style="width:65%"></div>
+      <div class="caixa"><b>Cookies neste dispositivo</b><div class="chk"><i class="x"></i>Essenciais (fixo)</div><div class="chk"><i></i>Análise de uso</div></div>
+      <div class="caixa"><b>Seus dados</b><table><tr><th>Dado</th><th>Valor</th><th>Por quê</th></tr><tr><td>Nome</td><td>···</td><td>···</td></tr><tr><td>E-mail</td><td>···</td><td>···</td></tr><tr><td>Nasc.</td><td>···</td><td>···</td></tr></table></div>
+      <div class="caixa"><b>Consentimentos</b><div class="chk"><i class="x"></i>Fidelidade</div><div class="chk"><i></i>Ofertas personalizadas</div></div>
+      <div class="grade2"><div class="btn claro">Baixar meus dados</div><div class="btn">Excluir conta</div></div>
+    </div>
+    <div class="rodape-nav"><span>Cardápio</span><span>Promoções</span><span>Pedidos</span><span>Conta</span></div>
+  </div>
+  <div class="nota">Direitos do titular num só lugar: ver, exportar (JSON), revogar e excluir. Exclusão pede confirmação em diálogo.</div>
+</div>
+
+<div class="bloco" id="m9">
+  <div class="titulo">M9 · Fidelidade e promoções</div>
+  <div class="frame mobile">
+    <div class="topo"><div class="img logo"></div><div class="linha m" style="width:90px"></div></div>
+    <div class="conteudo">
+      <div class="caixa" style="background:#666;color:#fff"><span>Seu saldo</span><b style="font-size:34px">180 pontos</b><div style="height:10px;background:#999;border-radius:5px"><div style="width:60%;height:100%;background:#eee;border-radius:5px"></div></div><span style="font-size:11px">Faltam 20 para …</span></div>
+      <div class="grade2"><div class="caixa"><div class="linha m"></div><span class="chip">50 pts</span><div class="btn peq claro">Usar</div></div><div class="caixa"><div class="linha m"></div><span class="chip">100 pts</span><div class="btn peq claro">Usar</div></div></div>
+      <div class="linha t" style="width:40%;margin-top:8px"></div>
+      <div class="caixa" style="border-left:8px solid #888"><div class="linha m" style="width:60%"></div><div class="linha"></div></div>
+      <div class="caixa tracejada"><b>Ofertas personalizadas desativadas</b><div class="linha"></div><div class="btn peq claro" style="align-self:start">Ativar</div><span class="marcador" style="right:-6px;top:-8px">9</span></div>
+    </div>
+    <div class="rodape-nav"><span>Cardápio</span><span>Promoções</span><span>Pedidos</span><span>Conta</span></div>
+  </div>
+  <div class="nota">9. Campanhas segmentadas só aparecem com consentimento de marketing; sem ele, a tela explica o motivo e oferece a ativação.</div>
+</div>
+
+<!-- ======================= DESKTOP ======================= -->
+<div class="bloco" id="d1">
+  <div class="titulo">D1 · Cardápio em desktop (1280px)</div>
+  <div class="frame desktop">
+    <div class="topo" style="padding:12px 120px"><div class="img logo"></div><div class="linha m" style="width:100px"></div><span class="chip">📍 Unidade</span><div class="grow"></div><span class="chip on">Cardápio</span><span class="chip">Promoções</span><span class="chip">Pedidos</span><span class="chip">Conta</span><span class="chip">Fidelidade</span><div class="btn peq">🛒 2</div></div>
+    <div class="conteudo" style="padding:24px 120px;gap:16px">
+      <div class="linha t" style="width:30%;height:30px"></div><div class="linha" style="width:35%"></div>
+      <div class="caixa tracejada cinza"><div class="linha" style="width:40%"></div></div>
+      <div class="chips"><span class="chip on">Tudo</span><span class="chip">Tapiocas</span><span class="chip">Cuscuz</span><span class="chip">Bolos e doces</span><span class="chip">Bebidas</span><span class="chip">Café da manhã</span></div>
+      <div class="grade2" style="gap:16px">
+        <div class="caixa"><div class="flex" style="align-items:start"><div class="img" style="width:96px;height:96px"></div><div class="col grow"><div class="linha m" style="width:50%"></div><div class="linha"></div><div class="entre"><div class="linha m" style="width:60px"></div><div class="btn peq">Adicionar</div></div></div></div></div>
+        <div class="caixa"><div class="flex" style="align-items:start"><div class="img" style="width:96px;height:96px"></div><div class="col grow"><div class="linha m" style="width:50%"></div><div class="linha"></div><div class="entre"><div class="linha m" style="width:60px"></div><div class="btn peq">Adicionar</div></div></div></div></div>
+        <div class="caixa"><div class="flex" style="align-items:start"><div class="img" style="width:96px;height:96px"></div><div class="col grow"><div class="linha m" style="width:50%"></div><div class="linha"></div><div class="entre"><div class="linha m" style="width:60px"></div><div class="btn peq">Adicionar</div></div></div></div></div>
+        <div class="caixa"><div class="flex" style="align-items:start"><div class="img" style="width:96px;height:96px"></div><div class="col grow"><div class="linha m" style="width:50%"></div><div class="linha"></div><div class="entre"><div class="linha m" style="width:60px"></div><div class="btn peq claro">Indisponível</div></div></div></div></div>
+      </div>
+      <div class="btn" style="width:440px;align-self:center">Ver carrinho · 2 itens · R$ 00,00</div>
+    </div>
+  </div>
+  <div class="nota">Mesma estrutura do mobile: a barra inferior vira navegação no topo, unidade fica visível no cabeçalho e o cardápio passa a 2 colunas.</div>
+</div>
+
+<div class="bloco" id="d2">
+  <div class="titulo">D2 · Carrinho e pagamento em desktop</div>
+  <div class="frame desktop">
+    <div class="topo" style="padding:12px 120px"><div class="img logo"></div><div class="linha m" style="width:100px"></div><div class="grow"></div><span class="chip">Cardápio</span><span class="chip">Promoções</span><span class="chip">Pedidos</span><span class="chip">Conta</span><div class="btn peq">🛒</div></div>
+    <div class="conteudo" style="padding:24px 120px;flex-direction:row;gap:24px;align-items:flex-start">
+      <div class="col grow" style="gap:16px">
+        <div class="linha t" style="width:30%;height:30px"></div>
+        <div class="caixa"><b>Forma de pagamento</b>
+          <div class="caixa" style="flex-direction:row;align-items:center"><span class="bolinha on"></span>Pix</div>
+          <div class="caixa" style="flex-direction:row;align-items:center"><span class="bolinha"></span>Cartão de crédito</div>
+          <div class="caixa" style="flex-direction:row;align-items:center"><span class="bolinha"></span>Cartão de débito</div>
+          <div class="btn">Pagar e enviar pedido</div><div class="linha" style="width:70%;align-self:center"></div></div>
+      </div>
+      <div class="caixa cinza" style="width:340px"><b>Pedido para retirada</b><div class="linha" style="width:60%"></div><div class="linha"></div><div class="linha" style="width:80%"></div><div class="entre">Subtotal<div class="linha" style="width:60px"></div></div><div class="entre">Desconto<div class="linha" style="width:60px"></div></div><div class="entre"><b>Total</b><div class="linha m" style="width:70px"></div></div><span class="anot">fixo ao rolar</span></div>
+    </div>
+  </div>
+  <div class="nota">Checkout em 2 colunas: ação à esquerda, resumo fixo à direita. No mobile o resumo desce para baixo da ação.</div>
+</div>
+
+<div class="bloco" id="d3">
+  <div class="titulo">D3 · Cozinha (KDS) · perfil Cozinha</div>
+  <div class="frame desktop">
+    <div class="topo" style="background:#555;color:#fff"><div class="img logo"></div><b>Unidade</b><span class="chip on">Cozinha</span><div class="grow"></div><span class="chip" style="color:#fff">Cozinha</span><div class="btn peq claro">Sair</div></div>
+    <div class="conteudo" style="flex-direction:row;gap:16px;background:#f4f4f4">
+      <div class="caixa grow" style="background:#fff;border-top:8px solid #555"><div class="entre"><b>Pedido recebido</b><span class="chip">2</span></div>
+        <div class="caixa"><div class="entre"><b style="font-size:24px">A123</b><span class="chip">3 min</span></div><div class="linha" style="width:40%"></div><div class="linha"></div><div class="linha" style="width:70%"></div><div class="btn">Iniciar preparo</div></div>
+        <div class="caixa" style="border:3px solid #333"><div class="entre"><b style="font-size:24px">B456</b><span class="chip on">16 min</span></div><div class="linha"></div><div class="btn">Iniciar preparo</div><span class="marcador" style="right:-6px;top:-8px">10</span></div></div>
+      <div class="caixa grow" style="background:#fff;border-top:8px solid #888"><div class="entre"><b>Em preparo</b><span class="chip">1</span></div>
+        <div class="caixa"><div class="entre"><b style="font-size:24px">C789</b><span class="chip">6 min</span></div><div class="linha"></div><div class="btn">Marcar como pronto</div></div></div>
+      <div class="caixa grow" style="background:#fff;border-top:8px solid #bbb"><div class="entre"><b>Pronto</b><span class="chip">0</span></div><span class="anot">Nenhum pedido</span></div>
+    </div>
+  </div>
+  <div class="nota">Colunas por status, mais antigo primeiro. Pedidos de todos os canais (app, totem, balcão) chegam na mesma fila. 10. Atraso acima de 15 min ganha destaque. A cozinha vê só primeiro nome e itens.</div>
+</div>
+
+<div class="bloco" id="d4">
+  <div class="titulo">D4 · Gestão · perfil Gerente</div>
+  <div class="frame desktop">
+    <div class="topo" style="background:#555;color:#fff"><div class="img logo"></div><b>Unidade</b><span class="chip" style="color:#fff">Balcão</span><span class="chip" style="color:#fff">Cozinha</span><span class="chip on">Gestão</span><div class="grow"></div><span class="chip" style="color:#fff">Gerente</span></div>
+    <div class="conteudo" style="gap:14px;background:#f4f4f4">
+      <div class="entre"><div class="linha t" style="width:20%;height:26px"></div><div class="entrada" style="width:220px"></div></div>
+      <div class="grade4"><div class="caixa" style="background:#fff">Faturamento<div class="linha t"></div></div><div class="caixa" style="background:#fff">Pedidos<div class="linha t"></div></div><div class="caixa" style="background:#fff">Ticket médio<div class="linha t"></div></div><div class="caixa" style="background:#fff">Cancelamentos<div class="linha t"></div></div></div>
+      <div class="grade2"><div class="caixa" style="background:#fff"><b>Pedidos por canal</b><div class="linha" style="width:90%;height:12px"></div><div class="linha" style="width:70%;height:12px"></div><div class="linha" style="width:50%;height:12px"></div><div class="linha" style="width:30%;height:12px"></div></div><div class="caixa" style="background:#fff"><b>Mais vendidos</b><div class="linha" style="width:85%;height:12px"></div><div class="linha" style="width:60%;height:12px"></div><div class="linha" style="width:55%;height:12px"></div><div class="linha" style="width:40%;height:12px"></div></div></div>
+      <div class="caixa" style="background:#fff"><div class="entre"><b>Auditoria</b><div class="entrada" style="width:180px"></div></div><table><tr><th>Quando</th><th>Ação</th><th>Perfil</th><th>Pedido</th><th>Detalhe</th></tr><tr><td>···</td><td>Cancelamento</td><td>atendente</td><td>A123</td><td>motivo</td></tr><tr><td>···</td><td>Desconto</td><td>sistema</td><td>B456</td><td>campanha</td></tr><tr><td>···</td><td>Resgate</td><td>sistema</td><td>C789</td><td>pontos</td></tr></table></div>
+    </div>
+  </div>
+  <div class="nota">Indicadores só agregados, sem dados pessoais de clientes. Trilha de auditoria de cancelamentos, descontos e resgates com perfil, data e motivo. Atendente e cozinha não têm acesso a esta tela.</div>
+</div>
+
+<!-- ======================= TOTEM ======================= -->
+<div class="bloco" id="t1">
+  <div class="titulo">T1 · Totem: descanso</div>
+  <div class="frame totem" style="background:#ddd;align-items:center;justify-content:center;gap:24px">
+    <div class="img" style="width:160px;height:160px;border-radius:50%"></div>
+    <div class="linha t" style="width:60%;height:40px"></div><div class="linha m" style="width:35%"></div>
+    <div class="btn" style="font-size:22px;padding:20px 32px;border-radius:99px">👆 Toque para fazer seu pedido</div>
+    <div class="linha" style="width:55%"></div>
+  </div>
+  <div class="nota">Tela inteira é um único botão. Avisa que não precisa de cadastro.</div>
+</div>
+
+<div class="bloco" id="t2">
+  <div class="titulo">T2 · Totem: cardápio por toque</div>
+  <div class="frame totem">
+    <div class="topo" style="padding:16px"><div class="img logo" style="width:48px;height:48px"></div><div class="linha m" style="width:110px"></div><div class="grow"></div><div class="btn claro">Cancelar pedido</div></div>
+    <div class="chips" style="padding:14px"><span class="chip" style="padding:14px 22px">Tapiocas</span><span class="chip on" style="padding:14px 22px">Cuscuz</span><span class="chip" style="padding:14px 22px">Bebidas</span></div>
+    <div class="conteudo grade2" style="display:grid;align-content:start;gap:16px">
+      <div class="caixa" style="align-items:center;height:220px"><div class="img" style="width:110px;height:110px"></div><div class="linha m" style="width:70%"></div><div class="linha m" style="width:40%"></div></div>
+      <div class="caixa" style="align-items:center;height:220px;position:relative;border-width:3px"><div class="img" style="width:110px;height:110px"></div><div class="linha m" style="width:70%"></div><div class="linha m" style="width:40%"></div><span class="marcador" style="right:-8px;top:-8px;width:34px;height:34px;line-height:34px;font-size:16px">2</span></div>
+      <div class="caixa" style="align-items:center;height:220px;opacity:.5"><div class="img" style="width:110px;height:110px"></div><div class="linha m" style="width:70%"></div>Esgotado</div>
+    </div>
+    <div class="entre" style="padding:16px;background:#555;color:#fff"><b style="font-size:20px">3 itens · R$ 00,00</b><div class="btn" style="padding:18px 24px">Revisar pedido</div></div>
+  </div>
+  <div class="nota">Cartões grandes (alvo ≥ 72px), um toque adiciona, contador no canto. Após 60 s sem toque aparece "Ainda está aí?" com contagem de 15 s e a sessão é apagada.</div>
+</div>
+
+<div class="bloco" id="t3">
+  <div class="titulo">T3 · Totem: CPF opcional para pontos</div>
+  <div class="frame totem">
+    <div class="topo" style="padding:16px"><div class="img logo" style="width:48px;height:48px"></div><div class="linha m" style="width:110px"></div></div>
+    <div class="conteudo" style="padding:24px;gap:16px">
+      <div class="linha t" style="width:70%;height:34px"></div><div class="linha" style="width:90%"></div>
+      <div class="caixa" style="align-items:center;font:700 30px monospace;letter-spacing:3px">•••.•••.•••-25</div>
+      <div class="grade3"><div class="tecla">1</div><div class="tecla">2</div><div class="tecla">3</div><div class="tecla">4</div><div class="tecla">5</div><div class="tecla">6</div><div class="tecla">7</div><div class="tecla">8</div><div class="tecla">9</div><div class="tecla" style="font-size:14px">Limpar</div><div class="tecla">0</div><div class="tecla">⌫</div></div>
+      <div class="anot">CPF usado só para localizar a conta; não fica salvo no totem.</div>
+      <div class="grade2"><div class="btn claro" style="padding:20px">Pular</div><div class="btn" style="padding:20px">Confirmar CPF</div></div>
+    </div>
+  </div>
+  <div class="nota">LGPD em tela pública: dígitos ocultos enquanto digita, só os 2 finais aparecem. Teclado próprio na tela, sem teclado do sistema. "Pular" tem o mesmo destaque.</div>
+</div>
+
+<div class="bloco" id="t4">
+  <div class="titulo">T4 · Totem: senha de retirada</div>
+  <div class="frame totem" style="align-items:center;justify-content:center;gap:20px;padding:24px">
+    <div class="img" style="width:110px;height:110px;border-radius:50%"></div>
+    <div class="linha t" style="width:65%;height:36px"></div><div class="linha m" style="width:45%"></div>
+    <div style="font:800 110px system-ui;letter-spacing:8px">A123</div>
+    <div class="linha" style="width:80%"></div>
+    <div class="btn" style="padding:20px 48px">Concluir</div>
+    <div class="anot">Fecha sozinha em 20 s e limpa a sessão</div>
+  </div>
+  <div class="nota">Senha grande para fotografar ou memorizar; mesma senha aparece no painel de chamada da loja.</div>
+</div>
+
+</body>
+</html>

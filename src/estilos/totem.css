@@ -1,0 +1,54 @@
+/* Totem: tela touch, alvos de toque de no mínimo 72px, texto grande */
+.totem { min-height: 100dvh; display: flex; flex-direction: column; background: var(--palha); font-size: 1.15rem; user-select: none; }
+.totem .logo-nome { font-size: 1.6rem; }
+.totem-cabecalho { display: flex; align-items: center; gap: var(--e4); padding: var(--e4) var(--e5); border-bottom: var(--contorno); background: var(--branco); }
+.totem-unidade { font-weight: 600; color: var(--cinza); }
+.totem-cabecalho .botao { margin-left: auto; }
+.totem-conteudo { flex: 1; display: flex; flex-direction: column; }
+.botao-totem { min-height: 80px; font-size: 1.35rem; padding: var(--e4) var(--e6); }
+
+.totem-descanso { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--e5); border: none; cursor: pointer; background: var(--barro); color: var(--palha); padding: var(--e6); text-align: center; }
+.totem-descanso-titulo { font-family: var(--fonte-titulo); font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 800; color: var(--branco); }
+.totem-descanso-unidade { font-size: 1.4rem; color: var(--sol-claro); }
+.totem-descanso-chamada { display: inline-flex; align-items: center; gap: var(--e3); margin-top: var(--e5); padding: var(--e4) var(--e6); background: var(--sol); color: var(--carvao); border: var(--contorno); border-radius: 999px; box-shadow: var(--sombra); font-size: 1.6rem; font-weight: 700; animation: pulsar 2s ease-in-out infinite; }
+.totem-descanso-rodape { font-size: 1rem; color: #fbe9dc; max-width: 32ch; }
+@keyframes pulsar { 50% { transform: scale(1.04); } }
+
+.totem-cardapio { flex: 1; display: grid; grid-template-rows: auto 1fr auto; min-height: 0; }
+.totem-categorias { display: flex; gap: var(--e3); padding: var(--e4) var(--e5); overflow-x: auto; }
+.totem-categorias button { flex: none; min-height: 72px; padding: 0 var(--e6); border: var(--contorno); border-radius: 999px; background: var(--branco); font-size: 1.2rem; font-weight: 700; cursor: pointer; }
+.totem-categorias button[aria-pressed='true'] { background: var(--carvao); color: var(--palha); }
+.totem-produtos { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--e4); padding: 0 var(--e5) var(--e5); align-content: start; overflow-y: auto; }
+.totem-produto { position: relative; display: flex; flex-direction: column; align-items: center; gap: var(--e2); padding: var(--e4); border: var(--contorno); border-radius: var(--raio); background: var(--branco); box-shadow: var(--sombra); cursor: pointer; text-align: center; min-height: 240px; }
+.totem-produto:active { transform: translate(3px, 3px); box-shadow: none; }
+.totem-produto.selecionado { background: var(--sol-claro); }
+.totem-produto:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+.totem-produto-nome { font-weight: 700; font-size: 1.15rem; }
+.totem-produto-preco { font-weight: 700; color: var(--barro); font-size: 1.25rem; }
+.totem-produto-qtd { position: absolute; top: -12px; right: -12px; width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; background: var(--barro); color: var(--branco); border: var(--contorno); font-weight: 800; font-size: 1.2rem; }
+.totem-barra { display: flex; align-items: center; justify-content: space-between; gap: var(--e4); padding: var(--e4) var(--e5); background: var(--carvao); color: var(--palha); }
+.totem-barra-total { font-size: 1.4rem; font-weight: 700; }
+
+.totem-pagina { width: 100%; max-width: 44rem; margin: 0 auto; padding: var(--e6) var(--e5); display: flex; flex-direction: column; gap: var(--e5); }
+.totem-pagina h1 { font-size: clamp(2rem, 5vw, 3rem); }
+.totem-texto { font-size: 1.3rem; }
+.totem-lista { display: grid; gap: 0; }
+.totem-item { display: flex; justify-content: space-between; align-items: center; gap: var(--e3); padding: var(--e3) 0; border-bottom: 1px solid #e2d4bb; font-size: 1.2rem; font-weight: 600; }
+.totem-item:last-child { border-bottom: none; }
+.totem-item .quantidade button { width: 64px; height: 64px; font-size: 1.6rem; }
+.totem-acoes { display: grid; grid-template-columns: 1fr 1fr; gap: var(--e4); }
+.totem-total { font-size: 1.5rem; display: flex; justify-content: space-between; }
+.totem-total strong { font-family: var(--fonte-titulo); font-size: 2.25rem; }
+
+.totem-cpf { font-family: ui-monospace, monospace; font-size: clamp(1.75rem, 6vw, 2.75rem); letter-spacing: 0.08em; text-align: center; padding: var(--e4); border: var(--contorno); border-radius: var(--raio); background: var(--branco); }
+.totem-teclado { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--e3); }
+.totem-teclado button { min-height: 80px; font-size: 1.75rem; font-weight: 700; border: var(--contorno); border-radius: var(--raio-pequeno); background: var(--branco); box-shadow: var(--sombra-pequena); cursor: pointer; }
+.totem-teclado button:active { transform: translate(2px, 2px); box-shadow: none; }
+
+.totem-confirmacao { align-items: center; text-align: center; }
+.totem-check { display: grid; place-items: center; width: 120px; height: 120px; border-radius: 50%; background: var(--mandacaru); color: var(--branco); border: var(--contorno); box-shadow: var(--sombra); }
+.totem-senha { font-size: clamp(5rem, 18vw, 9rem); color: var(--barro); }
+
+.totem-sobreposicao { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; background: rgb(42 29 21 / 0.6); padding: var(--e5); }
+.totem-aviso { max-width: 32rem; text-align: center; }
+.totem-aviso h2 { font-size: 2rem; }

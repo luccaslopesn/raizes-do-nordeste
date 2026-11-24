@@ -69,7 +69,13 @@ export interface Pedido {
   desconto: number;
   total: number;
   pontosGerados: number;
+  pontosResgatados: number;
+  campanhaAplicadaId?: string;
+  recompensaAplicadaId?: string;
+  /** Primeiro nome ou apelido, exibido na chamada do balcão */
+  nomeChamada?: string;
   status: StatusPedido;
+  cancelamento?: { motivo: string; por: PerfilOperacao; em: string };
   pagamento: {
     forma: FormaPagamento;
     status: StatusPagamento;
@@ -88,14 +94,29 @@ export interface Consentimentos {
   atualizadoEm: string;
 }
 
+export type PerfilOperacao = 'atendente' | 'cozinha' | 'gerente' | 'sistema';
+
+export interface RegistroAuditoria {
+  id: string;
+  em: string;
+  unidadeId: string;
+  perfil: PerfilOperacao;
+  acao: 'cancelamento' | 'desconto-campanha' | 'resgate-recompensa' | 'status-alterado';
+  pedidoId: string;
+  detalhe: string;
+}
+
 export interface Cliente {
   id: string;
+  /** Hash simulado: o protótipo nunca guarda a senha em texto puro */
+  senhaHash: string;
   nome: string;
   email: string;
   telefone?: string;
   dataNascimento?: string; // só coletada com consentimento de fidelidade
   pontos: number;
   consentimentos: Consentimentos;
+  criadoEm: string;
 }
 
 export interface Campanha {
